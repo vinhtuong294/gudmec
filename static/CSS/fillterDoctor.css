@@ -1,0 +1,131 @@
+.container.container_custom3{
+    display: flex;
+    padding-top: 30px;
+    max-width: 1080px;
+}
+.cover-nulltext-and-towdiv{
+    display: block;
+}
+.container.container_custom3 .null-text{
+    display: flex;
+    width: 700px;
+    justify-content: center;
+}
+
+.cover-nulltext-and-towdiv .cover-two-div .list-doctor-department{
+    display: block;
+    width: 700px;
+}
+
+.buttons-fillter{
+    width: 320px;
+    margin-left: 60px;
+    border-radius: 5px;
+    border: 0.5px solid rgba(221, 240, 243, 0.944);
+    height: 520px;
+    background-color: rgb(248,249,252);
+    margin-top: 100px;
+}
+
+.buttons-fillter .container-radio .check-item{
+    display: flex;
+    width: 100%;
+    margin-bottom: 25px;
+}
+
+.buttons-fillter .available{
+    margin-top: 22px;
+    margin-left: 17px;
+    display: flex;
+    width: 100%;
+}
+
+.buttons-fillter .available-bf{
+    position: relative;
+    width: 3px;
+    height: 21px;
+    background-color: rgb(45,135,243);
+}
+
+.buttons-fillter .available-at{
+    margin-left: 20px;
+    color: rgb(45, 50, 59);
+    font-size: medium;
+    font-weight: 500;
+}
+
+.buttons-fillter .container-radio .check-item .lable-check{
+    margin-left: 25px;
+    font-size: medium;
+    font-weight: 400;
+}
+
+.buttons-fillter .container-radio .check-item .input-check{
+    width: 21px;
+    height: 21px;
+    margin-top: 3px;
+}
+
+.buttons-fillter .container-radio{
+    margin-top: 26px;
+    margin-left: 32px;
+    width: fit-content;
+}
+
+.fillter-body{
+    min-height: 900px;
+}
+.cover-two-div{
+    display: block;
+}
+
+.cover-two-div .input-fillter{
+    display: flex;
+    position: relative;
+    width: 530px;
+    margin-bottom: 90px;
+    flex-direction: column;
+}
+
+.cover-two-div .input-fillter #fillter-doctor{
+    width: 500px;
+    height: 48px;
+    border-radius: 5px;
+    border: 0.7px solid rgba(179, 191, 193, 0.944);
+    font-size: large;
+    padding: 8px 12px;
+}
+
+#fillter-doctor:focus{
+    border-color: rgba(131, 175, 183, 0.944);
+}
+
+.cover-two-div .input-fillter .doctor-name{
+   font-size: large;
+   margin-bottom: 7px;
+}
+
+.input-and-btn{
+    display: flex;
+}
+#search-btn{
+    width: 96px;
+    height: 49px;
+    margin-top: 33px;
+    border-radius: 8px;
+    background-color: rgb(45,135,243);
+    color: white;
+    border: 0.7px solid rgba(179, 191, 193, 0.944);
+
+}
+
+.reset-filter{
+    margin-left: 120px;
+    margin-top: 6px;
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.reset-filter:hover{
+    opacity: 1;
+}

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ĐẶT LỊCH KHÁM BÁC SĨ</title>
+</head>
+<body>
+<div class="booking-body">
+    <div class="container container-custom4">
+        <!-- Thông tin bác sĩ -->
+        <div class="card mb-3" style="max-width: 1080px; max-height: 100px;">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img id="avatar-doctor" src="{{ doctor.avatar_url }}" alt="Doctor Avatar">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ doctor.position }}</h5>
+                        <p class="card-text">{{ doctor.department_name }}</p>
+                        <div class="servicePrices card-text">
+                            <p class="card-text">Phí dịch vụ</p>
+                            <p class="card-text txt-price">{{ doctor.service_price }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Thông tin đặt lịch -->
+        <div class="detail-and-booking">
+            <section class="detail-doctor">
+                <h5 class="title-detail">Thông tin chi tiết</h5>
+                <p class="detail-content">{{ doctor.description }}</p>
+            </section>
+
+            <div id="dynamic-booking-div">
+                <div class="booking-doctor">
+                    <!-- Chọn ngày khám -->
+                    <div class="input-date">
+                        <input id="input-date" type="date">
+                    </div>
+
+                    <!-- Chọn giờ khám -->
+                    <div class="view-booking">
+                        <div class="booking-model">
+                            <i id="left-click" class="fa-solid fa-chevron-left"></i>
+                            <div class="view-booking-model" style="left: 0px;">
+                                {% for booking_item in booking_list %}
+                                    <div class="date-and-countAvailable {{ 'active' if forloop.first }}" data-value="{{ booking_item.date|date:'Y-m-d' }}">
+                                        <div class="date-and-count">
+                                            <div class="dayOfweek">{{ booking_item.date|date:'l' }}</div>
+                                            <div class="bookingItem">{{ booking_item.date|date:'d/m' }}</div>
+                                            <div class="cout-available {{ 'isavailable' if booking_item.shifts|length > 0 }}">
+                                                {{ booking_item.shifts|length }} trống
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <i id="right-click" class="fa-solid fa-chevron-right"></i>
+                        </div>
+
+                        <!-- Buổi sáng và chiều -->
+                        <div class="view-shift-available">
+                            <div class="morning">
+                                <span class="txt-morning">Sáng</span>
+                            </div>
+                            <div class="afternoon">
+                                <span class="txt-afternoon">Chiều</span>
+                            </div>
+                        </div>
+                        <div class="list-shift"></div>
+                        <div class="price">
+                            <span class="txt-price">Phí dịch vụ </span>
+                            <span class="doctor-price">{{ doctor.service_price }}</span>
+                            <i class="fa-solid fa-dong-sign icon-dong"></i>
+                        </div>
+                        <button class="btn-submit" data-bs-toggle="modal" data-bs-target="#exampleModal">Xác nhận lịch hẹn</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form ẩn để submit dữ liệu -->
+            <form class="form-hidden" action="{% url 'appointment' doctor.id %}" method="post">
+                {% csrf_token %}
+                <input type="text" id="Date" name="date">
+                <input type="number" id="id_doctor" name="doctor_id" value="{{ doctor.id }}">
+                <input type="number" id="id_benhnhan" name="patient_id" value="{{ user.patient_id }}">
+                <input type="number" id="id_shift" name="shift_id">
+            </form>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Xác nhận lịch hẹn</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body modal-body-content"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary btn-closeee" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary btn-confirm">Xác nhận</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

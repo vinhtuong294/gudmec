@@ -1,0 +1,312 @@
+{%load static%}
+{% block content %}
+<div class="fillter-body">
+    <div class="container container_custom3">
+        <div class="cover-nulltext-and-towdiv">
+            <div class="cover-two-div">
+                <div class="input-and-btn">
+                    <div class="input-fillter">
+                        <label class="doctor-name" for="fillter-doctor">Tên bác sĩ</label>
+                        <input id="fillter-doctor" type="text">
+                    </div>
+                    <div class="search-btn">
+                        <button id="search-btn">
+                            Tìm kiếm
+                        </button>
+                    </div>
+                </div>
+
+                    <div id="dynamic-content">
+                        {% if listDoctorOfDepartment %}
+                            <div class="list-doctor-department">
+                                {% for doctor in listDoctorOfDepartment %}
+                                    <div class="card w-100 mb-5 card-doctor">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ doctor.user.fullname }}</h5>
+                                            <p class="card-text">{{ doctor.department.name }}</p>
+                                            <div class="car-text" style="display: flex;">
+                                                <p class="card-text">
+                                                    <span style="color: green; margin-left: 5px;">{{ doctor.service_prices }}</span>
+                                                </p>
+                                                <i class="fa-solid fa-dong-sign" style="margin-top: 6px; margin-left: 2px;"></i>
+                                            </div>
+                                            <a class="btn btn-primary">Đặt lịch ngay</a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="null-text">
+                                <p>trống.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+            </div>
+        </div>
+        <div class="buttons-fillter">
+                    <div class="available">
+                        <span class="available-bf"></span>
+                        <span class="available-at">CÒN TRỐNG</span>
+                        <i class="reset-filter fa-solid fa-filter-circle-xmark"></i>
+                    </div>
+
+                    <div class="container-radio">
+
+                        <div class="check-item radio-today">
+                            <input class="input-check check-day"
+                                   value=""
+                                   id="check-today" name="check" type="radio">
+                            <label class="lable-check" for="check-today">Hôm nay</label>
+                        </div>
+
+                        <div class="check-item radio-tomorrow">
+                            <input class="input-check check-day"
+                                   value=""
+                                   id="check-tomorrow" name="check" type="radio">
+                            <label class="lable-check" for="check-tomorrow">Ngày mai</label>
+                        </div>
+
+                        <div class="check-item radio-nextsevenday">
+                            <input class="input-check check-day"
+                                   value=""
+                                   id="check-nextsevenday" name="check" type="radio">
+                            <label class="lable-check" for="check-nextsevenday">Bảy ngày tới</label>
+                        </div>
+                    </div>
+
+                    <div class="available">
+                        <span class="available-bf"></span>
+                        <span class="available-at">CA KHÁM</span>
+                    </div>
+
+                    <div class="container-radio">
+
+                        <div class="check-item radio-today">
+                            <input class="input-check check-session" data-value="morning"
+                                   value=""
+                                   id="check-morning" name="check1" type="radio">
+                            <label class="lable-check" for="check-morning">Sáng</label>
+                        </div>
+
+                        <div class="check-item radio-tomorrow">
+                            <input class="input-check check-session" data-value="afternoon"
+                                   value=""
+                                   id="check-afternoon" name="check1" type="radio">
+                            <label class="lable-check" for="check-afternoon">Chiều</label>
+                        </div>
+                    </div>
+
+                    <div class="available">
+                        <span class="available-bf"></span>
+                        <span class="available-at">GIỚI TÍNH</span>
+                    </div>
+
+                    <div class="container-radio">
+
+                        <div class="check-item radio-today">
+                            <input class="input-check check-gender" data-value="true"
+                                   value=""
+                                   id="check-male" name="check2" type="radio">
+                            <label class="lable-check" for="check-male">Nam</label>
+                        </div>
+
+                        <div class="check-item radio-tomorrow">
+                            <input class="input-check check-gender" data-value="false"
+                                   value=""
+                                   id="check-female" name="check2" type="radio">
+                            <label class="lable-check" for="check-female">Nữ</label>
+                        </div>
+                    </div>
+                </div>
+    </div>
+    <script>
+        {
+
+                const checks = document.querySelectorAll('.check-day')
+                const checksSession = document.querySelectorAll('.check-session')
+                const checksGender = document.querySelectorAll('.check-gender')
+                const btnSearch = document.getElementById('search-btn')
+                const inputSearch = document.getElementById('fillter-doctor')
+                const resetFilter = document.querySelector('.reset-filter')
+
+                resetFilter.onclick = () =>{
+                    checks.forEach(check => check.checked = false)
+                    checksGender.forEach(check => check.checked = false)
+                    checksSession.forEach(check => check.checked = false)
+                    inputSearch.value = ''
+
+                    var gender = ''
+                    var shift = ''
+
+                    var _url = btnSearch.getAttribute('value')
+                    var queryParam = encodeURIComponent('');
+                    var finalUrl =`${_url}?q=${queryParam}&gender=${gender}&shift=${shift}`;
+
+                    console.log(finalUrl)
+                    $.ajax({
+                        url: finalUrl,
+                        success: function (result) {
+                            $("#dynamic-content").html(result);
+                        }
+                    });
+                }
+
+
+                $(document).ready(function () {
+                    console.log("DOM đã sẵn sàng!");
+
+                    btnSearch.onclick = () => {
+                        var searchText = inputSearch.value;
+
+                        var gender = ''
+                        var shift = ''
+
+                        checksGender.forEach(check => {
+                            if (check.checked) gender = check.dataset.value
+                        });
+
+                        checksSession.forEach(check => {
+                            if (check.checked) shift = check.dataset.value
+                        });
+                        var ischecked = Array.from(checks).some(check => check.checked)
+
+                        if(!ischecked){
+                            var _url = 'http://127.0.0.1:8007/api/doctors-in-department/4'
+                            var queryParam = encodeURIComponent(searchText);
+                            var finalUrl =`${_url}?search_query=${queryParam}`;
+                            console.log(finalUrl)
+                            $.ajax({
+                                url: finalUrl,
+                                success: function (result) {
+                                    window.location.href = finalUrl
+                                }
+                            });
+                        }
+
+                        checks.forEach((check, index) => {
+                            if(check.checked){
+                                var _url = check.getAttribute('value')
+
+                                var queryParam = encodeURIComponent(searchText);
+                                var finalUrl =`${_url}?q=${queryParam}&gender=${gender}&shift=${shift}`;
+                                $.ajax({
+                                    url: finalUrl,
+
+                                    success: function (result) {
+                                        $("#dynamic-content").html(result);
+                                    }
+                                });
+                            };
+                        })
+                    }
+
+                    checks.forEach((check, index) => {
+                        check.onclick = function () {
+                            inputSearch.value = ""
+                            var searchText = inputSearch.value
+                            console.log(searchText)
+
+                            var gender = ''
+                            var shift = ''
+
+                            checksGender.forEach(check => {
+                                if(check.checked) gender = check.dataset.value
+                            });
+
+                            checksSession.forEach(check => {
+                                if(check.checked) shift = check.dataset.value
+                            });
+
+                            var _url = check.getAttribute('value')
+
+                            var queryParam = encodeURIComponent(searchText);
+                            var finalUrl = `${_url}?q=${queryParam}&gender=${gender}&shift=${shift}`
+
+                            console.log(finalUrl)
+                            $.ajax({
+                                url: finalUrl,
+                                success: function (result) {
+                                    $("#dynamic-content").html(result);
+                                }
+                            });
+                        };
+                    })
+
+                    checksGender.forEach((check, index) => {
+                        check.onclick = function () {
+                            inputSearch.value = ""
+                            var searchText = inputSearch.value
+                            console.log(searchText)
+
+                            var gender = check.dataset.value
+                            var shift = ''
+
+                            checksSession.forEach(check => {
+                                if(check.checked) shift = check.dataset.value
+                            });
+
+                            var ischecked = Array.from(checks).some(check => check.checked)
+
+                            var _url = btnSearch.getAttribute('value');
+                            if(ischecked) {
+                                checks.forEach(e => {
+                                    if(e.checked) _url = e.getAttribute('value')
+                                });
+                                console.log(_url)
+                            }
+
+
+                            var queryParam = encodeURIComponent(searchText);
+                            var finalUrl = `${_url}?q=${queryParam}&gender=${gender}&shift=${shift}`
+
+                            console.log(finalUrl)
+                            $.ajax({
+                                url: finalUrl,
+                                success: function (result) {
+                                    $("#dynamic-content").html(result);
+                                }
+                            });
+                        };
+                    })
+
+                    checksSession.forEach((check, index) => {
+                        check.onclick = function () {
+                            inputSearch.value = ""
+                            var searchText = inputSearch.value
+                            console.log(searchText)
+
+                            var gender = ''
+                            var shift = check.dataset.value
+
+                            checksGender.forEach(check => {
+                                if(check.checked) gender = check.dataset.value
+                            });
+
+                            var ischecked = Array.from(checks).some(check => check.checked)
+
+                            var _url = btnSearch.getAttribute('value');
+                            if(ischecked) {
+                                checks.forEach(e => {
+                                    if(e.checked) _url = e.getAttribute('value')
+                                });
+                                console.log(_url)
+                            }
+
+                            var queryParam = encodeURIComponent(searchText);
+                            var finalUrl = `${_url}?q=${queryParam}&gender=${gender}&shift=${shift}`
+
+                            console.log(finalUrl)
+                            $.ajax({
+                                url: finalUrl,
+                                success: function (result) {
+                                    $("#dynamic-content").html(result);
+                                }
+                            });
+                        };
+                    })
+                });
+        }
+    </script>
+</div>
+{% endblock %}

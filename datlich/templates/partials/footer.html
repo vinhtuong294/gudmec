@@ -1,0 +1,152 @@
+{% load static %}
+<div class="footer-component">
+  <div class="container container-list-all-doctor">
+    <div class="text-DNBS">ĐỘI NGŨ BÁC SĨ</div>
+  </div>
+  <div class="list-bs" id="list-bs">
+    <div class="container container-listAll-doctor">
+      <div class="row">
+        <div class="row-list-doctor">
+          <div class="card-bs col-lg-3 text-center">
+            <div class="card" style="width: 75%;">
+              <img src="{% static 'images/download (9).jpg' %}"
+                class="card-img-top" alt="...">
+              <div class="card-body">
+                <p class="card-text">TTƯT.PGS.TS TRIỆU TRIỀU DƯƠNG</p>
+              </div>
+            </div>
+          </div>
+          <div class="card-bs col-lg-3 text-center">
+            <div class="card" style="width: 75%;">
+              <img src="{% static 'images/nglv.jpg' %}" class="card-img-top" alt="...">
+              <div class="card-body">
+                <p class="card-text">GS.TS.BS NGUYỄN LÂN VIỆT</p>
+              </div>
+            </div>
+          </div>
+          <div class="card-bs col-lg-3 text-center">
+            <div class="card" style="width: 75%;">
+              <img src="{% static 'images/namAnh.jpg' %}" class="card-img-top" alt="...">
+              <div class="card-body">
+                <p class="card-text">TS.BS TĂNG HÀ NAM ANH</p>
+              </div>
+            </div>
+          </div>
+          <div class="card-bs col-lg-3 text-center">
+            <div class="card" style="width: 75%;">
+              <img src="{% static 'images/tuyetLan.jpg' %}" class="card-img-top" alt="...">
+              <div class="card-body">
+                <p class="card-text">PGS.TS.BS LÊ THỊ TUYẾT LAN</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="top-3-articles">
+      <!-- Latest Articles -->
+      <div class="container mt-5">
+        <h2 class="text-center"><span class="underline-title">Latest Articles</span></h2>
+        <div id="articles-container" class="row"></div>
+      </div>
+
+      <!-- Modal chi tiết bài báo -->
+      <div class="modal fade" id="articleModal" tabindex="-1" role="dialog" aria-labelledby="articleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document" style="max-width: 900px">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="articleModalLabel">Article Title</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div id="articleContent"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          fetch('/api/articles/top3')
+            .then(response => response.json())
+            .then(data => {
+              const container = document.querySelector('#articles-container');
+              container.innerHTML = ''; // Clear existing content
+
+              data.forEach(article => {
+                const articleElement = document.createElement('div');
+                articleElement.classList.add('col-lg-4', 'mb-4');
+
+                const createdAt = new Date(article.createdAt);
+                const formattedDate = createdAt instanceof Date && !isNaN(createdAt) ? createdAt.toLocaleDateString() : 'Unknown';
+
+                articleElement.innerHTML = `
+                            <div class="card mb-4">
+                                ${article.firstImageUrl ? `<img src="${article.firstImageUrl}" class="card-img-top" alt="Article Image">` : ''}
+                                <div class="card-body">
+                                    <h5 class="card-title">${article.title}</h5>
+                                    <p class="card-text"><i class="fa fa-calendar"></i> ${formattedDate}</p>
+                                    <button class="btn btn-primary" onclick="openArticleModal('${article.id}')">Read More</button>
+                                </div>
+                            </div>
+                        `;
+
+                container.appendChild(articleElement);
+              });
+            })
+            .catch(error => console.error('Error fetching articles:', error));
+        });
+
+        function openArticleModal (articleId) {
+          fetch(`/api/articles/${articleId}`)
+            .then(response => response.json())
+            .then(article => {
+              const modalTitle = document.getElementById('articleModalLabel');
+              const modalContent = document.getElementById('articleContent');
+
+              modalTitle.textContent = article[0].title;
+              modalContent.innerHTML = `
+                        <p>${article[0].content}</p>
+                    `;
+
+              const modal = new bootstrap.Modal(document.getElementById('articleModal'));
+              modal.show();
+            })
+            .catch(error => console.error('Error fetching article details:', error));
+        }
+      </script> -->
+    </div>
+
+    <div class="footer-footer">
+      <div class="logo-and-contact">
+        <div class="img-logo-gud">
+          <img id="img-logo-gud" src="{% static 'images/gudmec-footer.png' %}">
+        </div>
+        <div class="contact-us">
+          <div class="contact-title">
+            <span class="contact-title-text">Liên hệ</span>
+          </div>
+          <div class="contact-phone1">
+            <i class="fa-solid fa-mobile-screen-button"></i>
+            <span class="contact-phone1-text">SDT 1: 0397521031</span>
+          </div>
+          <div class="contact-phone2">
+            <i class="fa-solid fa-phone"></i>
+            <span class="contact-phone2-text">SDT 2: 0392445909</span>
+          </div>
+          <div class="contact-email">
+            <i class="fa-solid fa-envelope"></i>
+            <span class="contact-email-text">Email: contact.msgdkha@matsaigon.com</span>
+          </div>
+        </div>
+      </div>
+      <div class="read-text">
+        ©Phòng Khám Đa Khoa GudMec.
+        Tất cả những thông tin trên chỉ mang tính chất tham khảo, bệnh nhân phải đến trực tiếp bệnh viện khám để bác sĩ
+        chẩn đoán và điều trị.
+      </div>
+    </div>
+  </div>
+</div>

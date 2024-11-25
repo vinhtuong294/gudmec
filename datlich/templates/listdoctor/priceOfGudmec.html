@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BẢNG GIÁ BỆNH VIỆN ĐA KHOA GUDMEC</title>
+</head>
+<body>
+{% load static %}
+
+<div class="priceOfGudmec">
+    <div class="img-price">
+        <img id="img-price" src="{% static 'images/banner-bang-gia-desk.jpg' %}" alt="Bảng giá Gudmec">
+    </div>
+    <div class="mt-5 mb-5 container container-priceOfGudmec">
+        <div class="first-text-div">
+            <h2 class="title-process-page mb-5" style="color: rgb(22,154,231);">BẢNG GIÁ BỆNH VIỆN ĐA KHOA GUDMEC</h2>
+            <div class="diliver-title"></div>
+        </div>
+        <div class="text-p-price">
+            <p class="first-p-text">
+                Khách hàng có thể tham khảo bảng giá các dịch vụ khám, chữa bệnh tại Hệ thống Bệnh viện Đa khoa Gudmec bằng cách bấm vào các đường link bên dưới đây:
+            </p>
+            <p class="price-text first-p-text">Bảng giá tham khảo Bệnh viện Đa khoa Gudmec Hà Nội – <span style="color:rgb(22,154,231); text-decoration: underline;">Xem tại đây</span></p>
+            <p class="price-text first-p-text">Bảng giá tham khảo Bệnh viện Đa khoa Gudmec TPHCM – <span style="color:rgb(22,154,231); text-decoration: underline;">Xem tại đây</span></p>
+            <p class="first-p-text mt-3"><span style="color:red; font-weight: 500;">Xin lưu ý</span></p>
+            <p class="price-text first-p-text">Bảng giá được đăng tải trên website có tính chất tham khảo.</p>
+            <p class="price-text first-p-text">Chi phí dịch vụ của khách hàng được tính dựa vào bảng giá chi tiết ở thời điểm phát sinh dịch vụ.</p>
+            <p class="price-text first-p-text">Khách hàng có các thắc mắc, khiếu nại liên quan đến chi phí, xin vui lòng liên hệ với bệnh viện bằng cách gọi điện thoại đến số hotline hoặc đến trực tiếp các quầy Chăm sóc khách hàng tại Bệnh viện.</p>
+            <p class="price-text first-p-text">Khách hàng cần được tư vấn cụ thể về chi phí khám, điều trị bệnh tại bệnh viện, xin vui lòng liên hệ trực tiếp với nhân viên Chăm sóc khách hàng.</p>
+            <p class="first-p-text mt-3"><span style="color:black; font-weight: 500;">Liên hệ</span></p>
+            <p class="price-text first-p-text" style="font-weight: 500; color: rgb(104,104,104);">Bệnh viện Đa khoa Tâm Anh Hà Nội</p>
+            <p class="first-p-text child-text">108 Phố Hoàng Như Tiếp, P. Bồ Đề, Q. Long Biên, Tp. Hà Nội</p>
+            <p class="first-p-text child-text" style="color: rgb(22,154,231); text-decoration: underline;">024 7106 6858 – 024 3872 3872(HN)</p>
+            <p class="price-text first-p-text" style="font-weight: 500; color: rgb(104,104,104);">Bệnh viện Đa khoa Tâm Anh TPHCM</p>
+            <p class="first-p-text child-text">2B Phổ Quang, Phường 2, Q. Tân Bình, Tp. Hồ Chí Minh</p>
+            <p class="first-p-text child-text" style="color: rgb(22,154,231); text-decoration: underline">028 7102 6789 – 028 7180 6858 (HCM)</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .container-priceOfGudmec{
+        max-width: 1050px;
+        min-height: 60vh;
+    }
+    .first-p-text{
+        font-size: 15px;
+    }
+    .first-text-div{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .price-text{
+        position: relative;
+        margin-left: 20px;
+        color: rgb(104,104,104);
+    }
+    .price-text::before{
+        content: '• ';
+        position: absolute;
+        left: -10px;
+    }
+    .child-text{
+        position: relative;
+        margin-left: 40px;
+        color: rgb(104,104,104);
+    }
+    .child-text::before{
+        content: '• ';
+        position: absolute;
+        left: -10px;
+    }
+    #img-price{
+        width: 100%;
+        height: 400px;
+    }
+    .title-process-page{
+        position: relative;
+    }
+    .title-process-page::after{
+        position: absolute;
+        content: "";
+        left: 50%;
+        bottom: -25px;
+        border-bottom: 5px solid #5D5D5D;
+        width: 70px;
+        height: 1px;
+        transform: translateX(-50%);
+    }
+</style>
+
+</body>
+</html>

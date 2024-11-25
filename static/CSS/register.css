@@ -1,0 +1,212 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+html {
+    color: #333;
+    font-size: 62.5%;
+    font-family: "Open Sans", sans-serif;
+}
+
+.root{
+    display: flex;
+    height: 960px;
+
+}
+
+.right{
+    display: flex;
+    width: calc(100vw - 607px);
+    overflow: hidden;
+
+}
+.right .cover-img img{
+    position: relative;
+    width: calc(100vw - 300px);
+    height: 960px;
+    transition: all 0.7s ease-in-out;
+}
+.left{
+    background-color: rgb(29,35,42);
+}
+.SignUp-text{
+    position: relative;
+    top: 80px;
+    font-size: 3.25rem;
+    line-height: 2.5rem;
+    text-align: center;
+    color: rgb(156,163,175);
+}
+.w-full{
+    display: flex;
+    min-width: 450px;
+    justify-content: center;
+    margin-top: 110px;
+}
+.item-center{
+    min-width: 607px;
+}
+
+.form-group {
+    display: flex;
+    margin-bottom: 16px;
+    width: 450px;
+    height: 72px;
+    flex-direction: column;
+}
+
+
+.form-label {
+    color: rgb(156,163,175);
+    font-weight: 700;
+    padding-bottom: 6px;
+    line-height: 1.8rem;
+    font-size: 1.4rem;
+}
+
+.form-group.check .checkbox{
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+}
+
+.form-group.check{
+    width: 200px;
+    margin-right: 50px;
+    padding-left: 10px;
+}
+
+.form-group.check .checkbox .radio{
+    padding-right: 20px;
+    height: 40px;
+    margin-top: -2px;
+    padding-bottom: 2px;
+}
+.form-group.check .checkbox .radio span{
+    font-size: larger;
+}
+.form-group.check .checkbox .radio .form-control{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 23px;
+    height: 24px;
+    border-radius: 25%;
+    background: rgb(29,35,42);
+    border-width: 2px;
+    z-index: -100;
+}
+
+.fa-solid.fa-square-check{
+    display: none;
+    position: absolute;
+    margin-left: -24px;
+    margin-top: 4.41px;
+    font-size: large;
+}
+
+.fa-solid.fa-square-check.active{
+    display: inline;
+}
+
+.form-group.check .checkbox .radio .form-control:checked {
+    background: rgb(116,128,255);
+    border: 2px solid  rgb(116,128,255);
+}
+.cover{
+    display: flex;
+}
+.cover .form-group.birth{
+    width: 200px;
+}
+
+.form-control {
+    height: 48px;
+    padding: 8px 12px;
+    border: 1px solid rgb(56,63,71);
+    border-radius: 8px;
+    outline: none;
+    font-size: 1.4rem;
+    color: rgb(156,163,175);
+    background: rgb(29,35,42);
+}
+
+.form-control:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1px rgb(45,57,75) inset;
+}
+
+.form-control::placeholder{
+    color: rgb(156,163,175);
+}
+
+.form-control:hover {
+    border-color: rgb(116,128,255);
+}
+
+.form-submit{
+    width: 450px;
+    height: 48px;
+    border-radius: 8px;
+    border: none;
+    background-color: rgb(116,128,255);
+    font-size:16px;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+}
+
+.form-submit:hover{
+    background-color: rgb(93, 101, 187);
+}
+
+.devider{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    color: rgb(156,163,175);
+    font-size :medium;
+}
+
+.devider .befor{
+    position: relative;
+    width: 200px;
+    height: 1px;
+    background-color: rgb(56,63,71);
+    margin-right: 20px;
+}
+.devider .after{
+    position: relative;
+    width: 200px;
+    height: 1px;
+    background-color: rgb(56,63,71);
+    margin-left: 20px;
+}
+
+.link-login{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: rgb(156,163,175);
+    font-weight: 600;
+}
+a{
+    color: rgb(156,163,175);
+}
+.name{
+    position: absolute;
+    padding-top: 12px;
+    padding-left: 14px;
+    color: rgb(156,163,175);
+}
+
+.name span{
+    color: rgb(116,128,255);
+    font-size: larger;
+}
+.radio span{
+    color: rgb(156,163,175);
+}

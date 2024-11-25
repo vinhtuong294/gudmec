@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DANH SÁCH HỒ SƠ</title>
+</head>
+<body>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">STT</th>
+      <th scope="col">Tên bệnh nhân</th>
+      <th scope="col">Ngày khám</th>
+      <th scope="col">Ca khám</th>
+      <th scope="col">Kết luận của bác sĩ</th>
+      <th scope="col">Chi tiết</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% if list_medical_records and list_medical_records|length > 0 %}
+      {% for medical_record in list_medical_records %}
+        <tr class="row-medicalrecord">
+          <!-- Số thứ tự -->
+          <th scope="row">{{ forloop.counter }}</th>
+
+          <!-- Tên bệnh nhân -->
+          <td id="name-patient">{{ medical_record.patient_name }}</td>
+
+          <!-- Mã bệnh án (ẩn) -->
+          <td id="medical-id" style="display: none;">{{ medical_record.medical_record_id }}</td>
+
+          <!-- Ngày khám -->
+          <td id="schedule-date-value">{{ medical_record.date|date:"d/m/Y" }}</td>
+
+          <!-- Ca khám -->
+          <td id="schedule-shift-value">
+            {{ medical_record.shift.time_start }} : {{ medical_record.shift.time_end }}
+          </td>
+
+          <!-- Kết luận của bác sĩ -->
+          <td id="medicalRecord-value">
+            <span class="diagnosis-content">
+              {{ medical_record.diagnosis|default:"trống" }}
+            </span>
+          </td>
+
+          <!-- Chi tiết -->
+          <td>
+            <a class="detail-content" data-bs-toggle="modal" data-bs-target="#medicalRecord">Chi tiết</a>
+          </td>
+        </tr>
+      {% endfor %}
+    {% else %}
+      <tr>
+        <td colspan="6" class="text-center">Không có hồ sơ bệnh án nào.</td>
+      </tr>
+    {% endif %}
+  </tbody>
+</table>
+<style>
+  /* Đặt chiều rộng cho các cột trong bảng */
+.table-hover th, .table-hover td {
+    text-align: center; /* Căn giữa nội dung */
+    vertical-align: middle; /* Căn giữa theo chiều dọc */
+}
+
+/* Thiết lập chiều rộng cụ thể cho các cột */
+.table-hover th:nth-child(1),
+.table-hover td:nth-child(1) {
+    width: 5%; /* Cột STT */
+}
+
+.table-hover th:nth-child(2),
+.table-hover td:nth-child(2) {
+    width: 20%; /* Cột Tên bệnh nhân */
+}
+
+.table-hover th:nth-child(3),
+.table-hover td:nth-child(3) {
+    width: 15%; /* Cột Ngày khám */
+}
+
+.table-hover th:nth-child(4),
+.table-hover td:nth-child(4) {
+    width: 20%; /* Cột Ca khám */
+}
+
+.table-hover th:nth-child(5),
+.table-hover td:nth-child(5) {
+    width: 30%; /* Cột Kết luận của bác sĩ */
+}
+
+.table-hover th:nth-child(6),
+.table-hover td:nth-child(6) {
+    width: 10%; /* Cột Chi tiết */
+}
+
+/* Tạo khoảng cách giữa các cột */
+.table-hover th, .table-hover td {
+    padding: 8px 12px; /* Khoảng cách trong ô */
+}
+
+/* Thêm đường kẻ dọc giữa các cột */
+.table-hover td, .table-hover th {
+    border-right: 1px solid #ddd;
+}
+
+.table-hover th:last-child,
+.table-hover td:last-child {
+    border-right: none; /* Không thêm đường ở cột cuối */
+}
+
+</style>
+</body>
+</html>

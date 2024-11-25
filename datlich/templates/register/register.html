@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+{%load static%}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/register.css' %}">
+  <script src="https://kit.fontawesome.com/37e129438b.js" crossorigin="anonymous"></script>
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="root">
+    <div class="left">
+      <h1 class="name"><span>GudMec</span>Clinic</h1>
+      <div class="item-center">
+        <h1 class="SignUp-text">Đăng ký tài khoản</h1>
+        <div class="w-full">
+          <form action="" method="POST" class="form" id="form-1">
+
+            <div class="form-group">
+              <input id="username" name="fullname" type="text" placeholder="Tên đăng nhập" class="form-control"
+                autocomplete="off">
+              <span class="form-message"></span>
+            </div>
+
+            <div class="form-group">
+              <input id="fullname" name="fullname" type="text" placeholder="Họ và tên" class="form-control"
+                autocomplete="off">
+              <span class="form-message"></span>
+            </div>
+
+            <div class="cover">
+              <div class="form-group check">
+                <label for="gender" class="form-label">Giới Tính</label>
+                <div class="checkbox">
+                  <div class="radio">
+                    <input id="gender" name="gender" type="radio" value="true" class="form-control btn-radio">
+                    <i class="fa-solid fa-square-check"></i>
+                    <span>Nam</span>
+                  </div>
+                  <div class="radio">
+                    <input name="gender" type="radio" value="false" class="form-control btn-radio">
+                    <i class="fa-solid fa-square-check"></i>
+                    <span>Nữ</span>
+                  </div>
+                </div>
+                <span class="form-message"></span>
+              </div>
+
+              <div class="form-group birth">
+                <label for="birth" class="form-label">Năm sinh</label>
+                <input id="birth" name="password" type="date" placeholder="" class="form-control">
+                <span class="form-message"></span>
+              </div>
+            </div>
+
+
+            <div class="form-group">
+              <input id="email" name="email" type="text" placeholder="Email" class="form-control" autocomplete="off">
+              <span class="form-message"></span>
+            </div>
+
+            <div class="form-group">
+              <input id="sdt" name="sdt" type="text" placeholder="Số điện thoại" class="form-control"
+                autocomplete="off">
+              <span class="form-message"></span>
+            </div>
+
+            <div class="form-group">
+              <input id="password" name="password" type="password" placeholder="Mật khẩu" class="form-control"
+                autocomplete="off">
+              <span class="form-message"></span>
+            </div>
+
+            <div class="form-group">
+              <input id="password_confirmation" name="password_confirmation" placeholder="Nhập lại mật khẩu"
+                type="password" class="form-control" autocomplete="off">
+              <span class="form-message"></span>
+            </div>
+            <button class="form-submit">Đăng ký</button>
+          </form>
+        </div>
+        <div class="devider">
+          <span class="befor"></span>
+          or
+          <span class="after"></span>
+        </div>
+        <div class="link-login">
+          <p>Bạn đã có tài khoản? <a href="/login">Đăng nhập.</a></p>
+        </div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="cover-img">
+        <img src="{% static 'images/anh1.jpg' %}" alt="" class=" first-img"
+          style="left: -100px;">
+      </div>
+      <div class="cover-img">
+        <img src="{% static 'images/anh2.jpg' %}" alt="" class=" first-img"
+          style="left: -100px;">
+      </div>
+      <div class="cover-img">
+        <img src="{% static 'images/anh3.jpg' %}" alt="" class=" first-img"
+          style="left: -100px;">
+      </div>
+      <div class="cover-img">
+        <img src="{% static 'images/anh4.jpg' %}" alt="" class=" first-img"
+          style="left: -100px;">
+      </div>
+    </div>
+  </div>
+<script src="{% static 'js/register.js' %}"></script>
+</body>
+
+</html>
