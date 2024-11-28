@@ -80,12 +80,12 @@ class RegisterView(APIView):
         )
 
         # Lưu người dùng và xử lý tạo đối tượng phụ thuộc vai trò
-        user_repository.save(user)
+        user_repository.UserRepository.save(user)
 
         if role.name == ERole.PATIENT:
-            patient_service.create_new_patient(user)
+            patient_service.PatientService.create_new_patient(user)
         elif role.name == ERole.DOCTOR:
-            doctor_service.create_new_doctor(user)
+            doctor_service.DoctorService.create_new_doctor(user)
 
         # Trả về thông tin xác thực hoặc dữ liệu người dùng
         return Response({
@@ -259,21 +259,33 @@ class fillter_doctor(APIView):
 
     def get(self, request, department_id):
         if request.method == "GET":
-                search_query = request.GET.get('search_query', None)
-                print(search_query)
-                service = DepartmentService()
-                doctors = service.get_doctors_by_department(department_id, search_query)
+            search_query = request.GET.get('search_query', None)
+            gender = request.GET.get('gender', None)
+
+            service = DepartmentService()
+            # Lấy danh sách bác sĩ theo department_id
+            doctors = service.get_doctors_by_department(department_id)
+
+            # Kiểm tra các điều kiện tìm kiếm
+            if search_query or gender:
+                doctors = service.get_doctors_by_department(department_id, search_query, gender)
 
                 context = {
-                    "nav": "partials/navLogged.html",
-                    "view": "homepage/homeComponent/fillterDoctorPage.html",
-                    "file": "fillterDoctorPage",
-                    "listDepartmentResponse": service.get_all_departments(),
-                    "listDoctorOfDepartment": doctors,
+                    "listDoctorOfDepartment": doctors
                 }
+                return render(request, "homepage/homeComponent/fillterListDoctor.html", context)
+            
+            # Nếu không có điều kiện tìm kiếm, trả về danh sách bác sĩ mặc định
+            context = {
+                "nav": "partials/navLogged.html",
+                "view": "homepage/homeComponent/fillterDoctorPage.html",
+                "file": "fillterDoctorPage",
+                "listDepartmentResponse": service.get_all_departments(),
+                "listDoctorOfDepartment": doctors,
+                "departmentId": department_id
+            }
 
-                print(doctors)
-                return render(request, "homepage/index.html", context)
+            return render(request, "homepage/index.html", context)
 
 
 # Lấy thông tin chi tiết của bác sĩ

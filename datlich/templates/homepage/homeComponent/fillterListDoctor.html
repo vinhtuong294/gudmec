@@ -1,0 +1,24 @@
+{%load static%}
+{% if listDoctorOfDepartment %}
+<div class="list-doctor-department">
+    {% for doctor in listDoctorOfDepartment %}
+    <div class="card w-100 mb-5 card-doctor">
+        <div class="card-body">
+            <h5 class="card-title">{{ doctor.user.fullname }}</h5>
+            <p class="card-text">{{ doctor.department.name }}</p>
+            <div class="car-text" style="display: flex;">
+                <p class="card-text">
+                    <span style="color: green; margin-left: 5px;">{{ doctor.service_prices }}</span>
+                </p>
+                <i class="fa-solid fa-dong-sign" style="margin-top: 6px; margin-left: 2px;"></i>
+            </div>
+            <a class="btn btn-primary">Đặt lịch ngay</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="null-text">
+    <p>trống.</p>
+</div>
+{% endif %}

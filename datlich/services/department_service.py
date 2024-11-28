@@ -9,14 +9,28 @@ class DepartmentService:
             return Department.objects.get(id=department_id)
         except Department.DoesNotExist:
             return None
-    def get_doctors_by_department(self, department_id, search_query=None):
+    def get_doctors_by_department(self, department_id, search_query=None, gender=None):
         try:
             department = Department.objects.get(id=department_id)
 
             doctors = department.list_doctors.select_related('user', 'department').all()
 
+            # print(str(gender), "asdasd")
+            # print(str(doctors.first().user.gender).lower(), "dtb")
+            # print(str(doctors.first().user.gender).lower() == str(gender))
+
             if search_query:
                 doctors = doctors.filter(user__fullname__icontains=search_query)
+
+        # Filter by gender if provided
+            if gender:
+                gender = 1 if gender == "true" else 0
+                
+                print(gender, 'req')
+                print(doctors.first().user.gender, 'db')
+
+                print(gender == doctors.first().user.gender)
+                doctors = doctors.filter(user__gender__iexact=gender)
 
             return [
                 {

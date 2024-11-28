@@ -2,6 +2,11 @@ from django.db import models
 from ..models import UserModel
 
 class UserManager(models.Manager):
+    def save_user(self, user):
+        """Lưu user vào cơ sở dữ liệu"""
+        user.save()
+        return user
+
     def find_by_user_name(self, user_name):
         """Tìm user theo user_name và tham chiếu tới role"""
         return self.filter(user_name=user_name).select_related('role').first()
@@ -30,6 +35,10 @@ class UserManager(models.Manager):
 class UserRepository(UserModel):
     # Sử dụng manager tùy chỉnh
     objects = UserManager()
+
+    def save(self):
+        """Lưu user thông qua UserManager"""
+        return UserRepository.objects.save_user(self)
 
     class Meta:
         proxy = True  # Sử dụng proxy model, không tạo bảng riêng

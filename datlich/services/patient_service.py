@@ -10,12 +10,16 @@ class PatientService:
         self.patient_repository = PatientRepository()
         self.user_repository = UserRepository()
 
-    def create_new_patient(self, user):
-        """
-        Tạo mới một bệnh nhân từ user.
-        """
-        patient = Patient.objects.create(user=user)
-        return patient
+    def create_new_patient(user):
+    # Khởi tạo một đối tượng Patient mới cho người dùng
+        Patient.objects.create(
+            name=user.fullname,
+            user=user,
+            nhommau='O',  # Giá trị mặc định hoặc tùy chỉnh dựa trên yêu cầu của ứng dụng
+            cannang=0.0,  # Giá trị mặc định hoặc tùy chỉnh
+            chieucao=0.0,  # Giá trị mặc định hoặc tùy chỉnh
+            benhnen='N/A'  # Giá trị mặc định hoặc tùy chỉnh
+        )
 
     def get_all_patients(self):
         """

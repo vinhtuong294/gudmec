@@ -286,7 +286,7 @@ class RegisterRequestSerializer(serializers.Serializer):
     gender = serializers.BooleanField()
     birthday = serializers.DateField()
     email = serializers.EmailField()
-    phone = serializers.CharField(max_length=20)
+    telephone = serializers.CharField(max_length=20)
     role = serializers.CharField(max_length=20)
 
 
