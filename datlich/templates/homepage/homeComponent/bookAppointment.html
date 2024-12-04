@@ -1,8 +1,12 @@
 <!DOCTYPE html>
+{%load static%}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>ĐẶT LỊCH KHÁM BÁC SĨ</title>
+    <link rel="stylesheet" href="{% static 'css/booking.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 <body>
 <div class="booking-body">
@@ -11,12 +15,12 @@
         <div class="card mb-3" style="max-width: 1080px; max-height: 100px;">
             <div class="row g-0">
                 <div class="col-md-4">
-                    <img id="avatar-doctor" src="{{ doctor.avatar_url }}" alt="Doctor Avatar">
+                    <img id="avatar-doctor" src="{{ doctor.avatar }}" alt="Doctor Avatar">
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
                         <h5 class="card-title">{{ doctor.position }}</h5>
-                        <p class="card-text">{{ doctor.department_name }}</p>
+                        <p class="card-text">{{ doctor.name }}</p>
                         <div class="servicePrices card-text">
                             <p class="card-text">Phí dịch vụ</p>
                             <p class="card-text txt-price">{{ doctor.service_price }}</p>
@@ -48,12 +52,10 @@
                             <i id="left-click" class="fa-solid fa-chevron-left"></i>
                             <div class="view-booking-model" style="left: 0px;">
                                 {% for booking_item in booking_list %}
-                                    <div class="date-and-countAvailable {{ 'active' if forloop.first }}" data-value="{{ booking_item.date|date:'Y-m-d' }}">
+                                    <div class="date-and-countAvailable" data-value="{{ booking_item.date|date:'d-m-Y' }}">
                                         <div class="date-and-count">
-                                            <div class="dayOfweek">{{ booking_item.date|date:'l' }}</div>
-                                            <div class="bookingItem">{{ booking_item.date|date:'d/m' }}</div>
-                                            <div class="cout-available {{ 'isavailable' if booking_item.shifts|length > 0 }}">
-                                                {{ booking_item.shifts|length }} trống
+                                            <div class="cout-available 'isavailable' ">
+                                                {{ booking_item.time_start|date:"H:i" }}  - {{ booking_item.time_end|date:"H:i" }}
                                             </div>
                                         </div>
                                     </div>
@@ -62,7 +64,7 @@
                             <i id="right-click" class="fa-solid fa-chevron-right"></i>
                         </div>
 
-                        <!-- Buổi sáng và chiều -->
+                        {% comment %} <!-- Buổi sáng và chiều -->
                         <div class="view-shift-available">
                             <div class="morning">
                                 <span class="txt-morning">Sáng</span>
@@ -70,7 +72,7 @@
                             <div class="afternoon">
                                 <span class="txt-afternoon">Chiều</span>
                             </div>
-                        </div>
+                        </div> {% endcomment %}
                         <div class="list-shift"></div>
                         <div class="price">
                             <span class="txt-price">Phí dịch vụ </span>
@@ -83,13 +85,13 @@
             </div>
 
             <!-- Form ẩn để submit dữ liệu -->
-            <form class="form-hidden" action="{% url 'appointment' doctor.id %}" method="post">
+            {% comment %} <form class="form-hidden" action="{% url 'appointment' doctor.id %}" method="post">
                 {% csrf_token %}
                 <input type="text" id="Date" name="date">
                 <input type="number" id="id_doctor" name="doctor_id" value="{{ doctor.id }}">
                 <input type="number" id="id_benhnhan" name="patient_id" value="{{ user.patient_id }}">
                 <input type="number" id="id_shift" name="shift_id">
-            </form>
+            </form> {% endcomment %}
 
             <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

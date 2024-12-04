@@ -82,6 +82,7 @@ class Doctor(models.Model): #Bác sĩ
     service_prices = models.IntegerField()
     department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='list_doctors')
     user = models.OneToOneField(UserModel, on_delete=models.CASCADE, related_name='doctor')
+    avatar = models.TextField(blank=None, null=True)
 
     def __str__(self):
         return self.user.fullname
