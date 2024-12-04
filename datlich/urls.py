@@ -17,6 +17,8 @@ urlpatterns = [
     path('api/doctors-in-department/<int:department_id>/', views.fillter_doctor.as_view()),
     path('appointment/<int:doctor_id>/', booking_doctor.as_view(), name='appointment'),
     path('edit/', Edit_user.as_view(), name='edit'),
+    path('appointment/', Appointment.as_view(), name='appointmentDoctor'),
+    path('medical-record/<int:id>/', Medical_record.as_view(), name='medicalrecord'),
     # path('departments/', DepartmentView.as_view()),
     # path('departments/<int:department_id>/', DepartmentView.as_view()),
     # path('medicalRecordInforPageComponent/', medicalRecordInforPageComponent, name='medicalRecordInforPageComponent'),

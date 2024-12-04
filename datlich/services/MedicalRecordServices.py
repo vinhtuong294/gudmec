@@ -1,49 +1,41 @@
-from datetime import date as current_date
-from django.db.models import Q
-from ..models import MedicalRecord, Schedule
-from ..serializers import *
-from .exceptions import NotFoundException
-
+from datlich.models import MedicalRecord, Schedule
+from datetime import datetime, timedelta
 
 class MedicalRecordService:
-    def create_medical_record(self, schedule):
-        """
-        Tạo hồ sơ y tế dựa trên lịch hẹn.
-        """
-        medical_record = MedicalRecord(schedule=schedule)
-        medical_record.save()
+    def get_all_record(self):
+        return MedicalRecord.objects.all()
+    def get_record_patient(self, id):
+        # Lấy schedule có id tương ứng
+        schedule = Schedule.objects.select_related('patient').get(id=id)
+        # Lọc các MedicalRecord theo patient_id của schedule và sắp xếp giảm dần theo id
+        records = MedicalRecord.objects.select_related('schedule', 'schedule__patient').filter(
+            schedule__patient_id=schedule.patient.id
+        ).order_by('-id')
+        return [
+            {
+                "id": record.id,
+                "description": record.description,
+                "diagnosis": record.diagnosis,
+                "medical_results": record.medical_results,
+                "date": record.schedule.date,
+            }
+            for record in records
+        ]
+    def create_medical_record(schedule_id, data):
+    # Lấy đối tượng Schedule, nếu không tìm thấy thì trả về lỗi 404
+        schedule = Schedule.objects.get(id=schedule_id)
+        # Kiểm tra xem Schedule này đã có MedicalRecord chưa
+        if hasattr(schedule, 'medical_record'):
+            raise ValueError(f"Schedule with ID {schedule_id} already has an associated medical record.")
 
-    def handle_filter_medical_record(self, doctor_id, date="", patient_name="", today=False):
-        """
-        Lọc hồ sơ y tế dựa trên các tham số đầu vào.
-        """
-        query = Q(schedule__doctor_id=doctor_id)
-
-        if today:
-            query &= Q(schedule__date=current_date.today())
-
-        if date:
-            query &= Q(schedule__date=date)
-
-        if patient_name:
-            query &= Q(schedule__patient__user__fullname__icontains=patient_name)
-
-        return MedicalRecord.objects.filter(query)
-
-    def map_data_medical_record_response(self, medical_records):
-        """
-        Chuyển đổi danh sách MedicalRecord thành định dạng response.
-        """
-        return MedicalRecordResponseSerializer(medical_records, many=True).data
-
-    def update_medical_record(self, data):
-        """
-        Cập nhật hồ sơ y tế.
-        """
-        try:
-            medical_record = MedicalRecord.objects.get(id=data["id"])
-        except MedicalRecord.DoesNotExist:
-            raise NotFoundException("MedicalRecord not found")
-
-        medical_record.diagnosis = data["diagnosis"]
-        medical_record.save()
+        # Tạo bản ghi MedicalRecord mới
+        medical_record = MedicalRecord.objects.create(
+            schedule=schedule,
+            diagnosis=data.get('diagnosis'),
+            description=data.get('description'),
+            medical_results=data.get('medical_results')
+        )
+        schedule.state = 1
+        schedule.save()
+        print(medical_record)
+        return medical_record

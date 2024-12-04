@@ -2,26 +2,12 @@ from datetime import date, datetime
 from django.db.models import Sum
 from ..models import *
 from ..serializers import *
-from .MedicalRecordServices import MedicalRecordService
 
 
 class ScheduleService:
-    def __init__(self):
-        self.medical_record_service = MedicalRecordService()
 
-    def create_schedule(self, data):
-        """
-        Tạo lịch hẹn mới từ dữ liệu cung cấp.
-        """
-        schedule = Schedule(
-            date=data["date"],
-            state=data["state"],
-            doctor=Doctor.objects.get(id=data["doctor_id"]),
-            patient=Patient.objects.get(id=data["patient_id"]),
-            shift=Shift.objects.get(id=data["shift_id"]),
-        )
-        schedule.save()
-        self.medical_record_service.create_medical_record(schedule)
+    def get_one_schedule(self, id):
+        return Schedule.objects.get(id=id)
 
     def get_all_schedules(self):
         """
@@ -61,6 +47,29 @@ class ScheduleService:
             "is_my_schedule": schedule.patient.user.id == user_id if schedule.patient else False
         }for schedule in schedules
         ] 
+    def get_doctor_schedules(self,user_id, target_date):
+        schedules = Schedule.objects.select_related('shift', 'patient__user').all()
+        doctor_id = Doctor.objects.get(user_id=user_id).id
+        print(target_date)
+        # Lọc schedules theo điều kiện và sắp xếp
+        schedules = schedules.filter(
+            doctor_id=doctor_id,
+            patient__isnull=False  # Điều kiện patient không phải Null
+        ).order_by('-id')
+        if target_date:
+            schedules= schedules.filter(date=target_date)
+        print(schedules)
+        return [{
+            "id": schedule.id,
+            "date": schedule.date,
+            "time_start": schedule.shift.time_start,
+            "time_end": schedule.shift.time_end,
+            "is_ready": schedule.is_ready,
+            "state": schedule.state,
+            "patient_name": schedule.patient.user.fullname,
+        }for schedule in schedules
+        ]     
+    
     def booking(self,user_id, id):
         schedule = Schedule.objects.select_related('patient').get(id=id)
         patient =  Patient.objects.get(user_id =user_id )

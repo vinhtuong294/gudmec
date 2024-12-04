@@ -15,12 +15,13 @@ from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
 from .services import (department_service, patient_service, patient_service,
-                       exceptions, MedicalRecordServices,scheduleServices,doctor_service)
+                       exceptions,scheduleServices,doctor_service)
 from .services.authenticate_service import AuthenticateService
 from .services.department_service import DepartmentService
-from .services.MedicalRecordServices import MedicalRecordService
 from .services.scheduleServices import ScheduleService
 from .services.userService import UserService
+from .services.patient_service import PatientService
+from .services.medicalRecordServices import MedicalRecordService
 from .services.doctor_service  import DoctorService
 import json
 
@@ -186,15 +187,6 @@ class LogoutView(APIView):
 
 def search_result(request):
     return render(request, 'homepage/homeComponent/search_result.html')
-
-# def bookAppointment(request, doctor_id):
-#     doctor = get_object_or_404(Doctor, id=doctor_id)  # Lấy thông tin bác sĩ
-#     booking_list = Schedule.objects.filter(Doctor=doctor)  # Lấy danh sách lịch trống
-#     return render(request, 'homepage/homeComponent/bookAppointment.html', {
-#         'doctor': doctor,
-#         'booking_list': booking_list,
-#         'user': request.user,
-#     })
 
 
 
@@ -398,4 +390,65 @@ class Edit_user(APIView):
                 }, status=status.HTTP_200_OK)
 
 
+class Appointment(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        if request.method == "GET":
+            authenticate_service = AuthenticateService
+            schedule_service = ScheduleService()
+            token = request.COOKIES.get('authToken')
+            user = authenticate_service.get_user_from_token(token)
+            date = request.GET.get('date', None)
+            shifts = schedule_service.get_doctor_schedules(user.id,date )
+            if user.role_id==2 :
+                context = {
+                    "nav": "partials/navDoctorLogged.html",
+                    "navState": "navDoctorLogged",
+                    "view": "homepage/homeComponent/appointmentDoctor.html",
+                    "file": "appointmentDoctor",
+                    "bookings":shifts
+                }
+
+                return render(request, "homepage/index.html", context)
+            
+            
+class Medical_record(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, id):
+        if request.method == "GET":
+            authenticate_service = AuthenticateService
+            medicalRecordService= MedicalRecordService()
+            patientService = PatientService()
+            schedule_service = ScheduleService()
+            token = request.COOKIES.get('authToken')
+            user = authenticate_service.get_user_from_token(token)
+            records = medicalRecordService.get_record_patient(id)
+            patient = patientService.get_patient_schedule_id(id)
+            if user.role_id==2 :
+                context = {
+                    "nav": "partials/navDoctorLogged.html",
+                    "navState": "navDoctorLogged",
+                    "view": "homepage/homeComponent/medicalrecord.html",
+                    "file": "medicalrecord",
+                    "medical_records": records,
+                    "patient":patient,
+                    "state": schedule_service.get_one_schedule(id).state,
+                    "schedule_id":id,
+                }
+
+                return render(request, "homepage/index.html", context)
+    def post(self, request,id):
+        if request.method == "POST":
+            data = request.data
+            authenticate_service = AuthenticateService
+            medicalRecordService= MedicalRecordService
+            token = request.COOKIES.get('authToken')
+            user = authenticate_service.get_user_from_token(token)
+            if user.role_id==2 :
+                medicalRecordService.create_medical_record(id,data)
+                return Response({
+                    "message": "Thêm bệnh án thành công"
+                }, status=status.HTTP_200_OK)
 

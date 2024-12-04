@@ -6,7 +6,7 @@ from datlich.models import Doctor, Shift, Schedule
 def generate_daily_schedules():
     doctors = Doctor.objects.all()
     shifts = Shift.objects.all()
-    today = date.today() + timedelta(days=1)
+    today = date.today() + timedelta(days=6)
     
     for doctor in doctors:
         for shift in shifts:
@@ -32,6 +32,9 @@ def update_schedule_ready_status():
         shift__time_start__lt=now.time(),
         is_ready=True
     )
+    if overdue_schedules.patient:
+        overdue_schedules.state = 2
+        overdue_schedules.save()
     overdue_schedules.update(is_ready=False)
     print(f"Updated {overdue_schedules.count()} overdue schedules to is_ready=False at {now}")
 
@@ -40,7 +43,7 @@ def start_scheduler():
     scheduler = BackgroundScheduler()
     
     # Lịch trình chạy: Tạo schedule mới lúc 0h mỗi ngày
-    scheduler.add_job(generate_daily_schedules, 'cron', hour=16, minute=45)
+    scheduler.add_job(generate_daily_schedules, 'cron', hour=21, minute=41)
     
     # Lịch trình chạy: Cập nhật trạng thái schedule mỗi 1 phút
     scheduler.add_job(update_schedule_ready_status, 'interval', minutes=10)
