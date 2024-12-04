@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'static',
     'rest_framework_simplejwt',
     'corsheaders',
-
+    'apscheduler',
 ]
 
 MIDDLEWARE = [
@@ -87,7 +87,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'datlich',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': '2704',
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {

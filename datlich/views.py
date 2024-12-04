@@ -261,15 +261,16 @@ class fillter_doctor(APIView):
         if request.method == "GET":
             search_query = request.GET.get('search_query', None)
             gender = request.GET.get('gender', None)
+            session = request.GET.get('session', None)
+            shift = request.GET.get('shift', None)
 
             service = DepartmentService()
             # Lấy danh sách bác sĩ theo department_id
             doctors = service.get_doctors_by_department(department_id)
 
             # Kiểm tra các điều kiện tìm kiếm
-            if search_query or gender:
-                doctors = service.get_doctors_by_department(department_id, search_query, gender)
-
+            if search_query or gender or session or shift or search_query =='':
+                doctors = service.get_doctors_by_department(department_id, search_query, gender,session,shift)
                 context = {
                     "listDoctorOfDepartment": doctors
                 }

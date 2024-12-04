@@ -57,21 +57,21 @@
                     <div class="container-radio">
 
                         <div class="check-item radio-today">
-                            <input class="input-check check-day"
+                            <input class="input-check check-day" data-value="today"
                                    value=""
                                    id="check-today" name="check" type="radio">
                             <label class="lable-check" for="check-today">Hôm nay</label>
                         </div>
 
                         <div class="check-item radio-tomorrow">
-                            <input class="input-check check-day"
+                            <input class="input-check check-day" data-value="tomorrow"
                                    value=""
                                    id="check-tomorrow" name="check" type="radio">
                             <label class="lable-check" for="check-tomorrow">Ngày mai</label>
                         </div>
 
                         <div class="check-item radio-nextsevenday">
-                            <input class="input-check check-day"
+                            <input class="input-check check-day" data-value="nextsevenday"
                                    value=""
                                    id="check-nextsevenday" name="check" type="radio">
                             <label class="lable-check" for="check-nextsevenday">Bảy ngày tới</label>
@@ -137,14 +137,16 @@
                     checks.forEach(check => check.checked = false)
                     checksGender.forEach(check => check.checked = false)
                     checksSession.forEach(check => check.checked = false)
-                    inputSearch.value = ''
+                    var searchText = inputSearch.value;
 
                     var gender = ''
                     var shift = ''
+                    var session = ''
 
-                    var _url = btnSearch.getAttribute('value')
-                    var queryParam = encodeURIComponent('');
-                    var finalUrl =`${_url}?q=${queryParam}&gender=${gender}&shift=${shift}`;
+                    
+                    var _url = `${baseUrl}${btnSearch.getAttribute('value')}`
+                    var queryParam = encodeURIComponent(searchText);
+                    var finalUrl =`${_url}?search_query=${queryParam}&gender=${gender}&shift=${shift}&session=${session}`;
 
                     console.log(finalUrl)
                     $.ajax({
@@ -155,7 +157,6 @@
                     });
                 }
 
-
                 $(document).ready(function () {
                     console.log("DOM đã sẵn sàng!");
 
@@ -164,77 +165,59 @@
 
                         var gender = ''
                         var shift = ''
+                        var session = ''
 
                         checksGender.forEach(check => {
                             if (check.checked) gender = check.dataset.value
                         });
 
-                        checksSession.forEach(check => {
+                        checks.forEach(check => {
                             if (check.checked) shift = check.dataset.value
                         });
-                        var ischecked = Array.from(checks).some(check => check.checked)
 
-                        if(!ischecked){
-                            var _url = `${baseUrl}${btnSearch.getAttribute('value')}`
-                            var queryParam = encodeURIComponent(searchText);
-                            var finalUrl =`${_url}?search_query=${queryParam}`;
-                            if(!searchText)
-                                window.location.href = finalUrl
+                        checksSession.forEach(check => {
+                            if (check.checked) session = check.dataset.value
+                        });
 
-                            console.log(finalUrl)
+                        var _url = `${baseUrl}${btnSearch.getAttribute('value')}`
+                        var queryParam = encodeURIComponent(searchText);
+                        var finalUrl =`${_url}?search_query=${queryParam}&gender=${gender}&shift=${shift}&session=${session}`;
+                        console.log(finalUrl)
                             $.ajax({
                                 url: finalUrl,
                                 success: function (result) {
-                                    //window.location.href = finalUrl
                                     $("#dynamic-content").html(result);
                                 }
                             });
-                        }
-
-                        checks.forEach((check, index) => {
-                            if(check.checked){
-                                var _url = check.getAttribute('value')
-
-                                var queryParam = encodeURIComponent(searchText);
-                                var finalUrl =`${_url}?q=${queryParam}&gender=${gender}&shift=${shift}`;
-                                $.ajax({
-                                    url: finalUrl,
-
-                                    success: function (result) {
-                                        // $("#dynamic-content").html(result);
-                                    }
-                                });
-                            };
-                        })
                     }
 
                     checks.forEach((check, index) => {
                         check.onclick = function () {
-                            inputSearch.value = ""
                             var searchText = inputSearch.value
                             console.log(searchText)
 
                             var gender = ''
-                            var shift = ''
+                            var shift = check.dataset.value
+                            var session = ''
 
                             checksGender.forEach(check => {
                                 if(check.checked) gender = check.dataset.value
                             });
 
                             checksSession.forEach(check => {
-                                if(check.checked) shift = check.dataset.value
+                                if(check.checked) session = check.dataset.value
                             });
 
                             var _url = check.getAttribute('value')
 
                             var queryParam = encodeURIComponent(searchText);
-                            var finalUrl = `${_url}?q=${queryParam}&gender=${gender}&shift=${shift}`
+                            var finalUrl = `${_url}?search_query=${queryParam}&gender=${gender}&shift=${shift}&session=${session}`
 
                             console.log(finalUrl)
                             $.ajax({
                                 url: finalUrl,
                                 success: function (result) {
-                                    // $("#dynamic-content").html(result);
+                                    $("#dynamic-content").html(result);
                                 }
                             });
                         };
@@ -242,14 +225,18 @@
 
                     checksGender.forEach((check, index) => {
                         check.onclick = function () {
-                            inputSearch.value = ""
                             var searchText = inputSearch.value
                             console.log(searchText)
 
                             var gender = check.dataset.value
                             var shift = ''
+                            var session = ''
 
                             checksSession.forEach(check => {
+                                if(check.checked) session = check.dataset.value
+                            });
+
+                            checks.forEach(check => {
                                 if(check.checked) shift = check.dataset.value
                             });
 
@@ -265,7 +252,7 @@
 
 
                             var queryParam = encodeURIComponent(searchText);
-                            var finalUrl = `${baseUrl}${btnSearch.getAttribute('value')}?search_query=${queryParam}&gender=${gender}&shift=${shift}`
+                            var finalUrl = `${baseUrl}${btnSearch.getAttribute('value')}?search_query=${queryParam}&gender=${gender}&shift=${shift}&session=${session}`
 
                             console.log(finalUrl)
                             $.ajax({
@@ -279,15 +266,18 @@
 
                     checksSession.forEach((check, index) => {
                         check.onclick = function () {
-                            inputSearch.value = ""
                             var searchText = inputSearch.value
                             console.log(searchText)
 
                             var gender = ''
-                            var shift = check.dataset.value
+                            var shift = ''
+                            var session = check.dataset.value
 
                             checksGender.forEach(check => {
                                 if(check.checked) gender = check.dataset.value
+                            });
+                            checks.forEach(check => {
+                                if(check.checked) shift = check.dataset.value
                             });
 
                             var ischecked = Array.from(checks).some(check => check.checked)
@@ -301,7 +291,7 @@
                             }
 
                             var queryParam = encodeURIComponent(searchText);
-                            var finalUrl = `${_url}?q=${queryParam}&gender=${gender}&shift=${shift}`
+                            var finalUrl = `${_url}?search_query=${queryParam}&gender=${gender}&shift=${shift}&session=${session}`
 
                             console.log(finalUrl)
                             $.ajax({
