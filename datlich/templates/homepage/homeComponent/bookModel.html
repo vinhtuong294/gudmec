@@ -1,0 +1,21 @@
+{%load static%}
+<div class="view-booking-model" style="left: 0px;">
+    {% for booking_item in booking_list %}
+        <div class="date-and-countAvailable {% if booking_item.is_my_schedule %} isBooked {% endif %} {% if booking_item.is_ready %} isavailable {% endif %}" data-value="{{booking_item.id}}">
+            <div class="date-and-count">
+                <div class="cout-available 'isavailable' ">
+                    {{ booking_item.time_start|date:"H:i" }}  - {{ booking_item.time_end|date:"H:i" }}
+                </div>
+                <div>
+                    {% if booking_item.is_my_schedule %}
+                        Đã đặt
+                    {% elif booking_item.is_ready %}
+                        Có thể đặt
+                    {% else %}
+                        Không thể đặt
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

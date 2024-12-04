@@ -1,12 +1,12 @@
 from apscheduler.schedulers.background import BackgroundScheduler
-from datetime import date, datetime
+from datetime import date, datetime,timedelta
 from datlich.models import Doctor, Shift, Schedule
 
 # Chức năng 1: Tạo lịch khám hàng ngày
 def generate_daily_schedules():
     doctors = Doctor.objects.all()
     shifts = Shift.objects.all()
-    today = date.today()
+    today = date.today() + timedelta(days=1)
     
     for doctor in doctors:
         for shift in shifts:
@@ -40,7 +40,7 @@ def start_scheduler():
     scheduler = BackgroundScheduler()
     
     # Lịch trình chạy: Tạo schedule mới lúc 0h mỗi ngày
-    scheduler.add_job(generate_daily_schedules, 'cron', hour=10, minute=44)
+    scheduler.add_job(generate_daily_schedules, 'cron', hour=16, minute=45)
     
     # Lịch trình chạy: Cập nhật trạng thái schedule mỗi 1 phút
     scheduler.add_job(update_schedule_ready_status, 'interval', minutes=10)

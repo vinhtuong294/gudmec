@@ -17,7 +17,7 @@
                 <div class="col-md-4">
                     <img id="avatar-doctor" src="{{ doctor.avatar }}" alt="Doctor Avatar">
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-8" id="doctor_id" data-value="{{doctor.id}}">
                     <div class="card-body">
                         <h5 class="card-title">{{ doctor.position }}</h5>
                         <p class="card-text">{{ doctor.name }}</p>
@@ -50,48 +50,40 @@
                     <div class="view-booking">
                         <div class="booking-model">
                             <i id="left-click" class="fa-solid fa-chevron-left"></i>
-                            <div class="view-booking-model" style="left: 0px;">
-                                {% for booking_item in booking_list %}
-                                    <div class="date-and-countAvailable" data-value="{{ booking_item.date|date:'d-m-Y' }}">
-                                        <div class="date-and-count">
-                                            <div class="cout-available 'isavailable' ">
-                                                {{ booking_item.time_start|date:"H:i" }}  - {{ booking_item.time_end|date:"H:i" }}
+                            <div id="dynamic-content">
+                                <div class="view-booking-model" style="left: 0px;">
+                                    {% for booking_item in booking_list %}
+                                        <div class="date-and-countAvailable {% if booking_item.is_my_schedule %} isBooked {% endif %} {% if booking_item.is_ready %} isavailable {% endif %}" data-value="{{booking_item.id}}">
+                                            <div class="date-and-count">
+                                                <div class="cout-available 'isavailable' ">
+                                                    {{ booking_item.time_start|date:"H:i" }}  - {{ booking_item.time_end|date:"H:i" }}
+                                                </div>
+                                                <div>
+                                                    {% if booking_item.is_my_schedule %}
+                                                        Đã đặt
+                                                    {% elif booking_item.is_ready %}
+                                                        Có thể đặt
+                                                    {% else %}
+                                                        Không thể đặt
+                                                    {% endif %}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                {% endfor %}
+                                    {% endfor %}
+                                </div>
                             </div>
                             <i id="right-click" class="fa-solid fa-chevron-right"></i>
                         </div>
-
-                        {% comment %} <!-- Buổi sáng và chiều -->
-                        <div class="view-shift-available">
-                            <div class="morning">
-                                <span class="txt-morning">Sáng</span>
-                            </div>
-                            <div class="afternoon">
-                                <span class="txt-afternoon">Chiều</span>
-                            </div>
-                        </div> {% endcomment %}
                         <div class="list-shift"></div>
                         <div class="price">
                             <span class="txt-price">Phí dịch vụ </span>
-                            <span class="doctor-price">{{ doctor.service_price }}</span>
+                            <span class="doctor-price">{{ doctor.service_prices }}</span>
                             <i class="fa-solid fa-dong-sign icon-dong"></i>
                         </div>
                         <button class="btn-submit" data-bs-toggle="modal" data-bs-target="#exampleModal">Xác nhận lịch hẹn</button>
                     </div>
                 </div>
             </div>
-
-            <!-- Form ẩn để submit dữ liệu -->
-            {% comment %} <form class="form-hidden" action="{% url 'appointment' doctor.id %}" method="post">
-                {% csrf_token %}
-                <input type="text" id="Date" name="date">
-                <input type="number" id="id_doctor" name="doctor_id" value="{{ doctor.id }}">
-                <input type="number" id="id_benhnhan" name="patient_id" value="{{ user.patient_id }}">
-                <input type="number" id="id_shift" name="shift_id">
-            </form> {% endcomment %}
 
             <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -101,16 +93,158 @@
                             <h1 class="modal-title fs-5" id="exampleModalLabel">Xác nhận lịch hẹn</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body modal-body-content"></div>
+                        <div class="modal-body modal-body-content">
+                            <div>
+                                <h5>Tên Bác Sĩ </h5>
+                                <div>{{doctor.name}}</div>
+                            </div>
+                            <div>
+                                <h5>Khoa</h5>
+                                <div>{{doctor.position}}</div>
+                            </div>
+                            <div>
+                                <h5>Ngày</h5>
+                                <div class="date-modal"></div>
+                            </div>
+                            <div>
+                                <h5>Giờ khám</h5>
+                                <div class="time-modal">
+                                </div>
+                            </div>
+
+                        </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary btn-closeee" data-bs-dismiss="modal">Đóng</button>
+                            <button type="button" id="close-modal" class="btn btn-secondary btn-closeee" data-bs-dismiss="modal">Đóng</button>
                             <button type="submit" class="btn btn-primary btn-confirm">Xác nhận</button>
                         </div>
                     </div>
                 </div>
             </div>
+            <div id="confirmModal" class="modal-close">
+                <div class="modal-content-close">
+                  <h3>Bạn có chắc chắn muốn hủy?</h3>
+                  <div class="modal-actions">
+                    <button id="cancelBtn">Không</button>
+                    <button id="confirmBtn">Có</button>
+                  </div>
+                </div>
+              </div>
         </div>
     </div>
+<script>
+
+    const today = new Date();
+    const formattedDate = today.toISOString().split("T")[0];
+    const btnConfirm = document.querySelector('.btn-confirm')
+    const inputDate = document.getElementById("input-date");
+    const doctorId = document.getElementById("doctor_id").dataset.value;
+    const btnCloseModal = document.querySelector('#close-modal');
+    const modalClose = document.querySelector('#confirmModal')
+    let schedule_id
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+    const token = getCookie("authToken");
+
+    document.addEventListener("DOMContentLoaded", function () {
+        inputDate.value = formattedDate;
+    });
+    const bookingItems = document.querySelectorAll(".date-and-countAvailable");
+
+    document.querySelector("#dynamic-content").addEventListener("click", (e) => {
+        if (e.target.closest(".date-and-countAvailable")) {
+            const shift = e.target.closest(".date-and-countAvailable");
+            schedule_id = shift.dataset.value;
+            // Xóa lớp 'active' khỏi tất cả các mục
+            document.querySelectorAll(".date-and-countAvailable").forEach(item => item.classList.remove("active"));
+    
+            // Thêm lớp 'active' vào mục được chọn
+            if(shift.classList.contains("isavailable")){
+                shift.classList.add("active");
+            }
+            if(shift.classList.contains("isBooked")){
+                modalClose.classList.add("active");
+            }
+    
+            // Lấy dữ liệu từ lịch
+
+            const time = shift.querySelector(".cout-available").textContent;
+    
+            // Cập nhật thông tin modal
+            document.querySelector(".date-modal").textContent = inputDate.value;
+            document.querySelector(".time-modal").textContent = time;
+        }
+    });
+    const handleBookingOrCancel = async () => {
+        try {
+            // Gọi PUT request với Fetch API
+            const response = await fetch(`/appointment/${schedule_id}/`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+    
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+    
+            const data = await response.json();
+            console.log('Booking/cancellation successful:', data);
+        } catch (error) {
+            console.error('Error booking/cancelling:', error.message);
+            errorMessage.textContent = 'Failed to book/cancel: ' + error.message;
+            errorMessage.style.display = 'block';
+            return;
+        }
+    
+        // Chỉ gọi Ajax sau khi Fetch API hoàn tất
+        const valueDate = inputDate.value;
+        const url = `http://127.0.0.1:8007/appointment/${doctorId}/?date=${valueDate}`;
+        $.ajax({
+            url: url,
+            success: function (result) {
+                $("#dynamic-content").html(result);
+                console.log(result);
+            }
+        });
+    };
+    
+
+    
+    
+    btnConfirm.addEventListener("click", (e) =>{
+        btnCloseModal.click();
+        handleBookingOrCancel()
+    })
+    document.getElementById("confirmBtn").onclick = function () {
+        modalClose.classList.remove("active");
+        handleBookingOrCancel()
+      };
+
+    document.getElementById("cancelBtn").onclick = function () {
+        modalClose.classList.remove("active");
+    };
+
+
+    inputDate.addEventListener("change", (e) =>{
+        inputDate.value = e.target.value
+        const valueDate = inputDate.value
+        const url = `http://127.0.0.1:8007/appointment/${doctorId}/?date=${valueDate}`
+        $.ajax({
+            url: url,
+            success: function (result) {
+                $("#dynamic-content").html(result);
+                console.log(result);
+            }
+        });
+    })
+
+</script>
 </div>
 </body>
 </html>

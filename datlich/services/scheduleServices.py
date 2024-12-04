@@ -44,23 +44,37 @@ class ScheduleService:
         schedules = Schedule.objects.filter(date=target_date)
         return ScheduleResponseSerializer(schedules, many=True).data
 
-    def get_schedules_by_doctor(self,doctor_id, target_date):
-        schedules = Schedule.objects.select_related('shift').all()
+    def get_schedules_by_doctor(self,user_id, doctor_id, target_date):
+        schedules = Schedule.objects.select_related('shift','patient__user').all()
         schedules =  schedules.filter(doctor_id=doctor_id)
         if target_date:
-            schedules.filter(date=target_date)
+            schedules= schedules.filter(date=target_date)
         else:
             today = datetime.today().date()
-            schedules.filter(date=today)
+            schedules = schedules.filter(date=today)
         return [{
             "id": schedule.id,
             "date": schedule.date,
             "time_start": schedule.shift.time_start,
             "time_end": schedule.shift.time_end,
-            "is_ready": schedule.is_ready
-
+            "is_ready": schedule.is_ready,
+            "is_my_schedule": schedule.patient.user.id == user_id if schedule.patient else False
         }for schedule in schedules
         ] 
+    def booking(self,user_id, id):
+        schedule = Schedule.objects.select_related('patient').get(id=id)
+        patient =  Patient.objects.get(user_id =user_id )
+
+        if schedule.patient:
+            schedule.is_ready = True
+            schedule.patient = None
+            schedule.save()
+        else:
+            schedule.is_ready = False
+            schedule.patient = patient
+            schedule.save()
+
+        return schedule
 
     def get_revenue_of_day(self, target_date):
         """

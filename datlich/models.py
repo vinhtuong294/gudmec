@@ -109,12 +109,10 @@ class Schedule(models.Model): #Lịch hẹn khám
     date = models.DateField()
     state = models.IntegerField(choices=ScheduleState.choices)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='schedules')
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='schedules')
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='schedules',blank=None, null=True)
     shift = models.ForeignKey(Shift, on_delete=models.CASCADE, related_name='schedules',blank=None, null=True)
     is_ready = models.BooleanField(default=True)
 
-    def __str__(self):
-        return f"Schedule on {self.date} for {self.patient.name}"
 
 class MedicalRecord(models.Model): #Bệnh án
     schedule = models.OneToOneField(Schedule, on_delete=models.CASCADE, related_name='medical_record')

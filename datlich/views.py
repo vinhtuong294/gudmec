@@ -277,12 +277,21 @@ class booking_doctor(APIView):
 
     def get(self, request, doctor_id):
         if request.method == "GET":
+            authenticate_service = AuthenticateService
+            token = request.COOKIES.get('authToken')
+            user = authenticate_service.get_user_from_token(token)
             date = request.GET.get('date', None)
+
             scheduleServices = ScheduleService()
             doctorService = DoctorService()
-            shifts = scheduleServices.get_schedules_by_doctor(doctor_id,date)
+            shifts = scheduleServices.get_schedules_by_doctor(user.id,doctor_id,date)
             doctor = doctorService.get_one_doctors(doctor_id)
-
+            if date:
+                shifts = scheduleServices.get_schedules_by_doctor(user.id,doctor_id,date)
+                context = {
+                "booking_list": shifts,
+                }
+                return render(request, "homepage/homeComponent/bookModel.html", context)
             context = {
                 "nav": "partials/navLogged.html",
                 "view": "homepage/homeComponent/bookAppointment.html",
@@ -292,6 +301,17 @@ class booking_doctor(APIView):
             }
 
             return render(request, "homepage/index.html", context)
+    def put(self, request, doctor_id):
+        if request.method == "PUT":
+            authenticate_service = AuthenticateService
+            token = request.COOKIES.get('authToken')
+            user = authenticate_service.get_user_from_token(token)
+            scheduleServices = ScheduleService()
+            shift = scheduleServices.booking(user.id,doctor_id)
+            return Response({
+                    "message": "Booking successfully.",
+                }, status=status.HTTP_200_OK)
+
 
 
 # Lấy thông tin chi tiết của bác sĩ
