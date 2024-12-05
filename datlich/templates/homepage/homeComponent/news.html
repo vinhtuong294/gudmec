@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+{% load static%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Bài Viết Khoa Học</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        /* CSS styles ở đây */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input[type="text"], .content-editable {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .content-editable {
+            min-height: 200px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Đăng Bài Viết Khoa Học</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="title">Tiêu đề:</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="image">Chọn hình ảnh:</label>
+                <input type="file" id="image" name="image" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label for="content">Nội dung:</label>
+                <textarea id="content" name="content" required rows="5" class="content-editable"></textarea>
+            </div>
+            <button type="submit" class="btn">Gửi Bài</button>
+        </form>
+    </div>
+
+    <script>
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+        const token = getCookie("authToken");
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('form');
+        
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // Ngăn chặn hành động mặc định của form
+        
+                // Tạo đối tượng FormData để xử lý dữ liệu form
+                const formData = new FormData(form);
+        
+                // Gửi dữ liệu bằng Fetch API
+                fetch('/news/', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Authorization': `Bearer ${token}` // Đính kèm CSRF Token
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP status ${response.status}`);
+                    }
+                    return response.json(); // Giả sử server trả về JSON
+                })
+                .catch(error => {
+                    // Xử lý lỗi
+                    alert('Có lỗi xảy ra khi gửi bài viết!');
+                    console.error(error);
+                });
+
+                window.location.href = '/posts/'
+            });
+        
+        });
+        
+    </script>
+</body>
+</html>

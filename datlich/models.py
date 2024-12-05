@@ -3,6 +3,8 @@ from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
+import os
 
 # Enum classes
 class ERole(models.TextChoices):
@@ -123,14 +125,17 @@ class MedicalRecord(models.Model): #Bệnh án
     def __str__(self):
         return f"Medical Record for {self.schedule.patient.name} on {self.schedule.date}"
 
-class Article(models.Model): #Bài viết khoa học
+class Article(models.Model):
     title = models.TextField()
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=20, choices=Status.choices)
     author = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='articles')
+    image = models.ImageField(upload_to='articles/images/', null=True, blank=True)  # Trường lưu ảnh
 
-    def __str__(self):
-        return self.title
+    def image_url(self):
+        if self.image:
+            return os.path.join(settings.MEDIA_URL, str(self.image))
+        return None
 

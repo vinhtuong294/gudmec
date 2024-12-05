@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh Sách Bài Viết</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        .article {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #fafafa;
+        }
+        .article h3 {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Danh Sách Bài Viết Khoa Học</h1>
+        {% for article in articles %}
+            <div class="article">
+                <h3>{{ article.title }}</h3>
+                <p><strong>Tác giả:</strong> {{ article.author.username }}</p>
+                <p><strong>Ngày đăng:</strong> {{ article.created_at|date:"d/m/Y H:i" }}</p>
+                <img style="width: 200px;" src="{{ article.image.url }}" alt=""/>
+                <p>{{ article.content|truncatewords:30 }}</p>
+            </div>
+        {% empty %}
+            <p>Chưa có bài viết nào.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -23,6 +23,7 @@ from .services.userService import UserService
 from .services.patient_service import PatientService
 from .services.medicalRecordServices import MedicalRecordService
 from .services.doctor_service  import DoctorService
+from .services.articleService  import ArticleService
 import json
 
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -404,7 +405,6 @@ class Appointment(APIView):
             if user.role_id==2 :
                 context = {
                     "nav": "partials/navDoctorLogged.html",
-                    "navState": "navDoctorLogged",
                     "view": "homepage/homeComponent/appointmentDoctor.html",
                     "file": "appointmentDoctor",
                     "bookings":shifts
@@ -429,7 +429,6 @@ class Medical_record(APIView):
             if user.role_id==2 :
                 context = {
                     "nav": "partials/navDoctorLogged.html",
-                    "navState": "navDoctorLogged",
                     "view": "homepage/homeComponent/medicalrecord.html",
                     "file": "medicalrecord",
                     "medical_records": records,
@@ -451,4 +450,51 @@ class Medical_record(APIView):
                 return Response({
                     "message": "Thêm bệnh án thành công"
                 }, status=status.HTTP_200_OK)
+                
 
+
+class News(APIView):    
+    permission_classes = [AllowAny]
+    def get(self, request):
+        # authenticate_service = AuthenticateService
+        # token = request.COOKIES.get('authToken')
+        # user = authenticate_service.get_user_from_token(token)
+        # if user.role_id==2 :
+        context = {
+            "nav": "partials/navDoctorLogged.html",
+            "view": "homepage/homeComponent/news.html",
+            "file": "news",
+        }
+
+        return render(request, "homepage/index.html", context)
+    def post(self, request):
+        authenticate_service = AuthenticateService
+        token = request.COOKIES.get('authToken')
+        user = authenticate_service.get_user_from_token(token)
+        if user.role_id==2 :
+            title = request.POST.get('title')
+            content = request.POST.get('content')
+            image = request.FILES.get('image')
+            data = {
+                "title": title,
+                "content": content,
+                "image": image
+            }
+            print(data)
+            articleService =ArticleService()
+            articleService.create_article(data,user.id)
+            return Response("create article successfully")
+                    
+class Posts(APIView):    
+    permission_classes = [AllowAny]
+    def get(self, request):
+        articleService =ArticleService()
+        posts = articleService.get_alls()
+        context = {
+            "nav": "partials/navDoctorLogged.html",
+            "view": "homepage/homeComponent/posts.html",
+            "file": "posts",
+            "articles":posts
+        }
+
+        return render(request, "homepage/index.html", context)

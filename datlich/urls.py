@@ -2,6 +2,8 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import *
 from . import views 
+from django.conf import settings
+from django.conf.urls.static import static
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -19,6 +21,10 @@ urlpatterns = [
     path('edit/', Edit_user.as_view(), name='edit'),
     path('appointment/', Appointment.as_view(), name='appointmentDoctor'),
     path('medical-record/<int:id>/', Medical_record.as_view(), name='medicalrecord'),
+    path('news/', News.as_view(), name = 'news'),
+    path('posts/', Posts.as_view(), name = 'posts'),
+
+
     # path('departments/', DepartmentView.as_view()),
     # path('departments/<int:department_id>/', DepartmentView.as_view()),
     # path('medicalRecordInforPageComponent/', medicalRecordInforPageComponent, name='medicalRecordInforPageComponent'),
@@ -40,4 +46,5 @@ urlpatterns = [
     # path('shifts/', ShiftListView.as_view(), name='shift-list'),
     # path('shifts/<int:id>/', ShiftDetailView.as_view(), name='shift-detail'),
 ]
-
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

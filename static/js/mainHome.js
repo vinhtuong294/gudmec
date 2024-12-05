@@ -104,6 +104,7 @@ window.addEventListener('resize', function (event) {
 navLink.forEach((link, index) => {
 
     link.onclick = () => {
+        console.log(link);
 
         if (index == 0) {
             lines.style.display = 'none';
