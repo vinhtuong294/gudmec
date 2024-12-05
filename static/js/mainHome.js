@@ -66,7 +66,7 @@ function toast({
     }
 }
 
-const storage =  {
+const storage = {
     get() {
         return JSON.parse(localStorage.getItem(NAV_INDEX_STORAGE_KEY));
     },
@@ -79,10 +79,10 @@ const storage =  {
 }
 navLink[0].classList.add('active');
 
-for(let i=0; i < navLink.length; i++) {
-    if(navLink[i].classList.contains('active') && storage.get()){
+for (let i = 0; i < navLink.length; i++) {
+    if (navLink[i].classList.contains('active') && storage.get()) {
         navLink[i].classList.remove('active');
-        navLink[storage.get()].classList.add('active')
+        navLink[storage.get()]?.classList.add('active')
         break;
     }
 }
@@ -90,24 +90,25 @@ for(let i=0; i < navLink.length; i++) {
 const _$ = document.querySelector('.link.active');
 const lines = document.querySelector('.nav-link .line');
 
-lines.style.left = _$.offsetLeft + 'px';
-lines.style.width = _$.offsetWidth + 'px';
-lines.style.top = _$.offsetTop + 42 + 'px';
+lines.style.left = _$?.offsetLeft + 'px';
+lines.style.width = _$?.offsetWidth + 'px';
+lines.style.top = _$?.offsetTop + 42 + 'px';
 lines.style.display = 'block';
 
-window.addEventListener('resize', function(event) {
+window.addEventListener('resize', function (event) {
     const $$ = document.querySelector('.link.active');
     lines.style.left = $$.offsetLeft + 'px';
     lines.style.width = $$.offsetWidth + 'px';
 });
 
-navLink.forEach((link, index) =>{
+navLink.forEach((link, index) => {
 
-    link.onclick = () =>{
+    link.onclick = () => {
+
         if (index == 0) {
             lines.style.display = 'none';
         }
-        if(link.classList.contains('team-of-doctors')){
+        if (link.classList.contains('team-of-doctors')) {
             scrollToElement('list-bs')
         }
         for (var i = 0; i < navLink.length; i++) {
@@ -117,9 +118,9 @@ navLink.forEach((link, index) =>{
         }
         lines.style.left = navLink[index].offsetLeft + 'px';
         lines.style.width = navLink[index].offsetWidth + 'px';
-        
-        
-        if(link.id === "link-popup"){
+
+
+        if (link.id === "link-popup") {
             popUp.style.display = 'block';
         }
         link.classList.add('active');
@@ -127,15 +128,15 @@ navLink.forEach((link, index) =>{
     }
 })
 
-document.onclick = function(e){
-    if(e.target !== btnDK && !popUp.contains(e.target) && popUp.style.display === 'block'){
-        
+document.onclick = function (e) {
+    if (e.target !== btnDK && !popUp.contains(e.target) && popUp.style.display === 'block') {
+
         console.log(e.target)
         popUp.style.display = 'none';
     }
 }
 
-btnClose.onclick = function(e){
+btnClose.onclick = function (e) {
     console.log(e.target)
     popUp.style.display = 'none';
 }
