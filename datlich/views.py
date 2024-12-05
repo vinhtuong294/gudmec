@@ -456,17 +456,17 @@ class Medical_record(APIView):
 class News(APIView):    
     permission_classes = [AllowAny]
     def get(self, request):
-        # authenticate_service = AuthenticateService
-        # token = request.COOKIES.get('authToken')
-        # user = authenticate_service.get_user_from_token(token)
-        # if user.role_id==2 :
-        context = {
-            "nav": "partials/navDoctorLogged.html",
-            "view": "homepage/homeComponent/news.html",
-            "file": "news",
-        }
+        authenticate_service = AuthenticateService
+        token = request.COOKIES.get('authToken')
+        user = authenticate_service.get_user_from_token(token)
+        if user.role_id==2 :
+            context = {
+                "nav": "partials/navDoctorLogged.html",
+                "view": "homepage/homeComponent/news.html",
+                "file": "news",
+            }
 
-        return render(request, "homepage/index.html", context)
+            return render(request, "homepage/index.html", context)
     def post(self, request):
         authenticate_service = AuthenticateService
         token = request.COOKIES.get('authToken')
@@ -488,13 +488,19 @@ class News(APIView):
 class Posts(APIView):    
     permission_classes = [AllowAny]
     def get(self, request):
+        authenticate_service = AuthenticateService
+        token = request.COOKIES.get('authToken')
+        user = authenticate_service.get_user_from_token(token)
         articleService =ArticleService()
         posts = articleService.get_alls()
         context = {
-            "nav": "partials/navDoctorLogged.html",
             "view": "homepage/homeComponent/posts.html",
             "file": "posts",
             "articles":posts
         }
+        if user.role_id==2 :
+            context["nav"] = {"partials/navDoctorLogged.html"}
+        if user.role_id==3 :
+            context["nav"] = {"partials/navLogged.html"}
 
         return render(request, "homepage/index.html", context)
