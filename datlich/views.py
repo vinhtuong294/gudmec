@@ -24,6 +24,7 @@ from .services.patient_service import PatientService
 from .services.medicalRecordServices import MedicalRecordService
 from .services.doctor_service  import DoctorService
 from .services.articleService  import ArticleService
+from .services.rateService  import RateService
 import json
 
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -424,7 +425,7 @@ class Medical_record(APIView):
             schedule_service = ScheduleService()
             token = request.COOKIES.get('authToken')
             user = authenticate_service.get_user_from_token(token)
-            records = medicalRecordService.get_record_patient(id)
+            records = medicalRecordService.get_record_patient_schedule(id)
             patient = patientService.get_patient_schedule_id(id)
             if user.role_id==2 :
                 context = {
@@ -480,7 +481,6 @@ class News(APIView):
                 "content": content,
                 "image": image
             }
-            print(data)
             articleService =ArticleService()
             articleService.create_article(data,user.id)
             return Response("create article successfully")
@@ -504,3 +504,82 @@ class Posts(APIView):
             context["nav"] = {"partials/navLogged.html"}
 
         return render(request, "homepage/index.html", context)
+    
+class AppointmentHistory(APIView):    
+    permission_classes = [AllowAny]
+    def get(self, request):
+        authenticate_service = AuthenticateService
+        schedule_service = ScheduleService()
+        token = request.COOKIES.get('authToken')
+        user = authenticate_service.get_user_from_token(token)
+        schedule = schedule_service.get_schedules_by_user(user.id)
+        context = {
+            "view": "homepage/homeComponent/appointmenthistory.html",
+            "file": "appointmenthistory",
+            "appointments": schedule,
+        }
+        if user.role_id==3 :
+            context["nav"] = {"partials/navLogged.html"}
+
+        return render(request, "homepage/index.html", context)
+
+class MyMedicalRecord(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        authenticate_service = AuthenticateService
+        medicalRecordService= MedicalRecordService()
+        patientService = PatientService()
+        token = request.COOKIES.get('authToken')
+        user = authenticate_service.get_user_from_token(token)
+        patient = patientService.get_patient_by_user_id(user.id)
+        records = medicalRecordService.get_record_patient(patient["id"])
+        if user.role_id==3 :
+            context = {
+                "nav": "partials/navDoctorLogged.html",
+                "view": "homepage/homeComponent/medicalrecord.html",
+                "file": "medicalrecord",
+                "medical_records": records,
+                "patient":patient,
+                "role":user.role_id,
+            }
+
+            return render(request, "homepage/index.html", context)
+
+class MyScheduleDetail(APIView):    
+    permission_classes = [AllowAny]
+    def get(self, request, id):
+        authenticate_service = AuthenticateService
+        schedule_service = ScheduleService()
+        medicalRecordService= MedicalRecordService()
+        token = request.COOKIES.get('authToken')
+        user = authenticate_service.get_user_from_token(token)
+        if user.role_id == 3:
+            schedule = schedule_service.get_one_with_all(id)
+            record = medicalRecordService.get_record_schedule(id)
+            context = {
+                "nav": "partials/navLogged.html",
+                "view": "homepage/homeComponent/myScheduleDetail.html",
+                "file": "myScheduleDetail",
+                "appointment": schedule,
+                "record": record,
+            }
+
+            return render(request, "homepage/index.html", context)
+class Rate(APIView):    
+    permission_classes = [AllowAny]
+    def post(self, request, id):
+        authenticate_service = AuthenticateService
+        token = request.COOKIES.get('authToken')
+        user = authenticate_service.get_user_from_token(token)
+        if user.role_id == 3:
+            rateService= RateService()
+            rate = request.data.get('rate')
+            content = request.data.get('content')
+            data = {
+                "rate": rate,
+                "content": content,
+            }
+            print(data)
+            rateService.create_rate(user.id,id,data)
+            return Response('Rate successfully')

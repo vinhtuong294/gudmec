@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch Sử Đặt Lịch Khám</title>
+    <style>
+        .appointment-history{
+            margin:20px 113px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: rgba(0,0,0, 0.3);
+            color: black;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .appointment-history-title, .appointment-history-empty{
+            text-align: center;
+        }
+        .appointment-detail{
+            color: blue;
+        }
+        .disable-0, .disable-2 {
+            display:none;
+        }
+    </style>
+</head>
+<body>
+    <div class="appointment-history">
+        <h1>Lịch Sử Đặt Lịch Khám</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th class="appointment-history-title">Ngày Hẹn</th>
+                    <th class="appointment-history-title">Tên Bác Sĩ</th>
+                    <th class="appointment-history-title">Trạng Thái</th>
+                    <th class="appointment-history-title">Chi tiết</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                <tr>
+                    <td>{{ appointment.date }}</td>
+                    <td>{{ appointment.doctor}}</td>
+                    <td>
+                        {% if appointment.state == 0 %}
+                            Đang chờ 
+                        {% elif appointment.state == 1 %}
+                            Đã hoàn thành
+                        {% elif appointment.state == 2 %}
+                            Đã bỏ lỡ
+                        {% endif %}
+                    </td>
+                    <td  ><a class="appointment-detail disable-{{appointment.state}}" href="/my-schedule/{{appointment.id}}/detail/" alt="">Xem chi tiết</a></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td class="appointment-history-empty" colspan="4">Không có lịch sử đặt lịch khám nào.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Cuộc Đặt Khám</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .doctor-info, .appointment-info, .review-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .doctor-info h2, .appointment-info h2, .review-section h2 {
+            color: #4CAF50;
+        }
+        .star-rating {
+            display: flex;
+            direction: row-reverse;
+            justify-content: flex-end;
+            margin: 10px 0;
+        }
+        .star-rating input {
+            display: none;
+        }
+        .star-rating label {
+            font-size: 30px;
+            color: #ddd;
+            cursor: pointer;
+        }
+        .star-rating input:checked ~ label {
+            color: #f39c12;
+        }
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #f39c12;
+        }
+        .review {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chi Tiết Cuộc Đặt Khám</h1>
+    <div class="container">
+
+        <div class="doctor-info">
+            <h2>Thông Tin Bác Sĩ</h2>
+            <p><strong>Tên:</strong> {{ appointment.doctor.user.fullname }}</p>
+            <p><strong>Chuyên Khoa:</strong> {{ appointment.doctor.position }}</p>
+            <p><strong>Số Điện Thoại:</strong> {{ appointment.doctor.user.telephone }}</p>
+            <p><strong>Email:</strong> {{ appointment.doctor.user.email }}</p>
+
+        
+        </div>
+
+        <div class="appointment-info">
+            <h2>Thông Tin Cuộc Hẹn</h2>
+            <p><strong>Ngày Khám:</strong> {{ appointment.date }}</p>
+            <p><strong>Ca Khám:</strong> {{ appointment.shift.time_start }} - {{ appointment.shift.time_end }} </p>
+            <p><strong>Trạng Thái:</strong> {{ appointment.state }}</p>
+        </div>
+
+        <div class="medical-record-info">
+            <h2>Thông Tin Bệnh Án</h2>
+            <p><strong>Mô tả triệu chứng:</strong> {{ record.description }}</p>
+            <p><strong>Kết Quả Khám:</strong> {{ record.medical_results }} </p>
+            <p><strong>Kết luận:</strong> {{ record.diagnosis }}</p>
+        </div>
+
+        <div class="review-section">
+            <h2>Đánh Giá Bác Sĩ</h2>
+            <form method="POST" action="" id="doctor_id" data-value="{{appointment.doctor.id}}">
+                <div class="star-rating">
+                    <input type="radio" id="star5" name="rating" value="5" required>
+                    <label for="star5" title="5 sao">★</label>
+                    <input type="radio" id="star4" name="rating" value="4">
+                    <label for="star4" title="4 sao">★</label>
+                    <input type="radio" id="star3" name="rating" value="3">
+                    <label for="star3" title="3 sao">★</label>
+                    <input type="radio" id="star2" name="rating" value="2">
+                    <label for="star2" title="2 sao">★</label>
+                    <input type="radio" id="star1" name="rating" value="1">
+                    <label for="star1" title="1 sao">★</label>
+                </div>
+                <textarea name="comment" placeholder="Nhập ý kiến đánh giá của bạn" rows="3" required></textarea>
+                <br>
+                <button type="submit">Gửi Đánh Giá</button>
+            </form>
+
+        </div>
+    </div>
+    <script>
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+        const token = getCookie("authToken");
+        const doctor_id = document.getElementById('doctor_id').dataset.value;
+    
+        document.querySelector('form').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Ngăn form gửi yêu cầu theo cách mặc định
+        
+            const rating = document.querySelector('input[name="rating"]:checked')?.value;
+            const comment = document.querySelector('textarea[name="comment"]').value;
+        
+            if (!rating || !comment) {
+                alert('Vui lòng chọn đánh giá và nhập ý kiến!');
+                return;
+            }
+        
+            const data = {
+                rate: parseInt(rating),
+                content: comment,
+            };
+            console.log(data);
+        
+            try {
+                const response = await fetch(`/rate/${doctor_id}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data)
+                });
+        
+                if (response.ok) {
+                    const result = await response.json();
+                    alert('Gửi đánh giá thành công!');
+                    document.querySelector('form').reset();
+                } else {
+                    const errorData = await response.json();
+                    alert('Gửi đánh giá thất bại: ' + (errorData.message || 'Đã có lỗi xảy ra.'));
+                }
+            } catch (error) {
+                console.error('Lỗi kết nối:', error);
+                alert('Không thể gửi đánh giá, vui lòng thử lại sau.');
+            }
+        });
+        
+        
+    </script>
+</body>
+</html>

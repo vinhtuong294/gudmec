@@ -27,14 +27,18 @@ def update_schedule_ready_status():
     now = datetime.now()
     today = date.today()
     
-    overdue_schedules = Schedule.objects.filter(
+    schedules = Schedule.objects.select_related('patient').all()
+    overdue_schedules = schedules.filter(
         date__lte=today,
         shift__time_start__lt=now.time(),
         is_ready=True
     )
-    if overdue_schedules.patient:
-        overdue_schedules.state = 2
-        overdue_schedules.save()
+    for schedule in overdue_schedules:
+        if schedule.patient:
+            schedule.state = 2
+            schedule.save()
+        else:
+            schedule.save()
     overdue_schedules.update(is_ready=False)
     print(f"Updated {overdue_schedules.count()} overdue schedules to is_ready=False at {now}")
 
@@ -46,7 +50,7 @@ def start_scheduler():
     scheduler.add_job(generate_daily_schedules, 'cron', hour=21, minute=41)
     
     # Lịch trình chạy: Cập nhật trạng thái schedule mỗi 1 phút
-    scheduler.add_job(update_schedule_ready_status, 'interval', minutes=10)
+    scheduler.add_job(update_schedule_ready_status, 'interval', minutes=5)
     
     scheduler.start()
     print("Scheduler started: Tasks are running.")

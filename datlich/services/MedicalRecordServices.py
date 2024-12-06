@@ -4,12 +4,41 @@ from datetime import datetime, timedelta
 class MedicalRecordService:
     def get_all_record(self):
         return MedicalRecord.objects.all()
-    def get_record_patient(self, id):
+    def get_record_patient_schedule(self, id):
         # Lấy schedule có id tương ứng
         schedule = Schedule.objects.select_related('patient').get(id=id)
         # Lọc các MedicalRecord theo patient_id của schedule và sắp xếp giảm dần theo id
         records = MedicalRecord.objects.select_related('schedule', 'schedule__patient').filter(
             schedule__patient_id=schedule.patient.id
+        ).order_by('-id')
+        return [
+            {
+                "id": record.id,
+                "description": record.description,
+                "diagnosis": record.diagnosis,
+                "medical_results": record.medical_results,
+                "date": record.schedule.date,
+            }
+            for record in records
+        ]
+    def get_record_schedule(self, id):
+        print(id)
+        record = MedicalRecord.objects.select_related('schedule').get(
+            schedule_id=id
+        )
+        print(record)
+        return {
+                "id": record.id,
+                "description": record.description,
+                "diagnosis": record.diagnosis,
+                "medical_results": record.medical_results,
+                "date": record.schedule.date,
+            }
+
+    def get_record_patient(self, id):
+        # Lọc các MedicalRecord theo patient_id của schedule và sắp xếp giảm dần theo id
+        records = MedicalRecord.objects.select_related('schedule', 'schedule__patient').filter(
+            schedule__patient_id=id
         ).order_by('-id')
         return [
             {

@@ -8,6 +8,9 @@ class ScheduleService:
 
     def get_one_schedule(self, id):
         return Schedule.objects.get(id=id)
+    
+    def get_one_with_all(self, id):
+        return Schedule.objects.select_related('doctor', 'doctor__user', 'patient', 'patient__user', 'shift').get(id=id)
 
     def get_all_schedules(self):
         """
@@ -45,6 +48,19 @@ class ScheduleService:
             "time_end": schedule.shift.time_end,
             "is_ready": schedule.is_ready,
             "is_my_schedule": schedule.patient.user.id == user_id if schedule.patient else False
+        }for schedule in schedules
+        ] 
+    def get_schedules_by_user(self,user_id):
+        schedules = Schedule.objects.select_related('shift','patient__user','doctor__user').all()
+        schedules =  schedules.filter(patient__user_id=user_id)
+        return [{
+            "id": schedule.id,
+            "date": schedule.date,
+            "time_start": schedule.shift.time_start,
+            "time_end": schedule.shift.time_end,
+            "is_ready": schedule.is_ready,
+            "doctor": schedule.doctor.user.fullname,
+            "state": schedule.state
         }for schedule in schedules
         ] 
     def get_doctor_schedules(self,user_id, target_date):

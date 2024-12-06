@@ -17,7 +17,15 @@
 </head>
 
 <body>
-
+    <style>
+        .sidebar-item{
+            display: block;
+            width: 250px;
+            margin-bottom: 10px;
+            font-weight: 500;
+            background-color: #f6f6f6
+        }
+    </style>
 
         <div class="pop-up">
             <div class="container container-custom2">
@@ -46,11 +54,11 @@
 
     <div class="content">
         <aside class="sidebar">
-            <div class="sidebar-item" data-id="profile" onclick="navigate(this, '{% url 'edit' %}')">Hồ sơ của tôi</div>
-            <div class="sidebar-item" data-id="health" onclick="navigate(this, }')">Sức khỏe của tôi</div>
-            <div class="sidebar-item" data-id="history" onclick="setActive(this)">Lịch sử đặt lịch</div>
-            <div class="sidebar-item" data-id="help" onclick="setActive(this)">Trợ giúp</div>
-            <div class="sidebar-item" data-id="logout" onclick="setActive(this)">Đăng xuất</div>
+            <a class="sidebar-item" data-id="profile" onclick="navigate(this, '{% url 'edit' %}')">Hồ sơ của tôi</a>
+            <a class="sidebar-item" data-id="health" onclick="navigate(this, }')">Sức khỏe của tôi</a>
+            <a href = "/appointmenthistory/" alt='' class="sidebar-item" data-id="history" >Lịch sử đặt lịch</a>
+            <a href = "/my-medical-record/" alt='' class="sidebar-item" data-id="history" >Bệnh án của tôi</a>
+            <a class="sidebar-item" data-id="help" onclick="setActive(this)">Trợ giúp</a>
         </aside>
 
         <main class="main-content">

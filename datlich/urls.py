@@ -23,28 +23,11 @@ urlpatterns = [
     path('medical-record/<int:id>/', Medical_record.as_view(), name='medicalrecord'),
     path('news/', News.as_view(), name = 'news'),
     path('posts/', Posts.as_view(), name = 'posts'),
+    path('appointmenthistory/', AppointmentHistory.as_view(), name = 'appointmenthistory'),
+    path('my-medical-record/', MyMedicalRecord.as_view(), name='mymedicalrecord'),
+    path('my-schedule/<int:id>/detail/', MyScheduleDetail.as_view(), name='my-schedule-detail'),
+    path('rate/<int:id>/', Rate.as_view(), name='rate'),
 
-
-    # path('departments/', DepartmentView.as_view()),
-    # path('departments/<int:department_id>/', DepartmentView.as_view()),
-    # path('medicalRecordInforPageComponent/', medicalRecordInforPageComponent, name='medicalRecordInforPageComponent'),
-    # path('quytrinhkham/', prosess_page, name='prosess_page'),
-    # path('price/', price_of_gudmec, name='price_of_gudmec'),
-    # path('<int:department_id>/', views.get_department, name='get_department'),
-    # path('doctors/<int:department_id>/', views.get_list_doctor_of_department, name='get_list_doctor_of_department'),
-    # path('doctor/<int:doctor_id>/', views.get_detail_doctor, name='get_detail_doctor'),
-    # path('doctors/today/<int:department_id>/', views.get_list_doctor_of_department_today, name='list_doctor_today'),
-    # path('doctors/tomorrow/<int:department_id>/', views.get_list_doctor_of_department_tomorrow,
-    #      name='list_doctor_tomorrow'),
-    # path('doctors/nextsevenday/<int:department_id>/', views.get_list_doctor_of_department_next_seven_days,
-    #      name='list_doctor_next_seven_days'),
-    # path('doctors/byName/<int:department_id>/', views.get_list_doctor_of_department_by_name,
-    #      name='list_doctor_by_name'),
-    # path('doctor/schedules/<int:doctor_id>/', views.get_list_schedule_of_doctor, name='get_list_schedule_of_doctor'),
-    # path('schedules/', ScheduleView.as_view(), name='schedule-list-create'),
-    # path('revenue/<str:date>/', RevenueView.as_view(), name='daily-revenue'),
-    # path('shifts/', ShiftListView.as_view(), name='shift-list'),
-    # path('shifts/<int:id>/', ShiftDetailView.as_view(), name='shift-detail'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

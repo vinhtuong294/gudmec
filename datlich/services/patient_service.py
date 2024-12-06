@@ -1,9 +1,7 @@
 from django.db import transaction
 from django.core.exceptions import ObjectDoesNotExist
-from ..repositories.patient_repository import PatientRepository
-from ..repositories.user_repository import UserRepository
 from ..serializers import *
-
+from datlich.models import Patient
 
 class PatientService:
 
@@ -19,11 +17,9 @@ class PatientService:
         )
 
     def get_all_patients(self):
-        """
-        Lấy tất cả bệnh nhân và trả về dưới dạng response.
-        """
-        patients = self.patient_repository.find_all()
-        return [PatientResponseSerializer.map_to_response(patient) for patient in patients]
+
+        patients = Patient.objects.all()
+        return patients
 
     @transaction.atomic
     def update_patient_info(self, user_id, nhommau, cannang, chieucao, benhnen):
@@ -50,12 +46,18 @@ class PatientService:
             raise RuntimeError("User not found")
 
     def get_patient_by_user_id(self, user_id):
-        """
-        Lấy bệnh nhân theo user_id.
-        """
         try:
-            patient = self.patient_repository.find_by_user_id(user_id)
-            return patient
+            patient = Patient.objects.select_related('user').get(user_id=user_id)
+            return {
+                "id": patient.id,
+                "name": patient.user.fullname,
+                "nhommau": patient.nhommau,
+                "cannang": patient.cannang,
+                "chieucao": patient.chieucao,
+                "benhnen": patient.benhnen,
+                "birthday": patient.user.birthday,
+                "gender": patient.user.gender,
+            }
         except ObjectDoesNotExist:
             raise RuntimeError("Patient not found")
 

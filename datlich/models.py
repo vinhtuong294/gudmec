@@ -85,9 +85,21 @@ class Doctor(models.Model): #Bác sĩ
     department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='list_doctors')
     user = models.OneToOneField(UserModel, on_delete=models.CASCADE, related_name='doctor')
     avatar = models.TextField(blank=None, null=True)
+    average_rate = models.FloatField(default=0)
+
+    def update_average_rate(self):
+        rates = self.rates.all()
+        self.average_rate = rates.aggregate(models.Avg('rate'))['rate__avg'] or 0
+        self.save()
 
     def __str__(self):
         return self.user.fullname
+    
+class Rate(models.Model):
+    content = models.TextField()
+    rate = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='rates')
+    user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='user_rates')
 
 class Patient(models.Model): #bệnh nhân
     name = models.CharField(max_length=255)
@@ -114,7 +126,7 @@ class Schedule(models.Model): #Lịch hẹn khám
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='schedules',blank=None, null=True)
     shift = models.ForeignKey(Shift, on_delete=models.CASCADE, related_name='schedules',blank=None, null=True)
     is_ready = models.BooleanField(default=True)
-
+    
 
 class MedicalRecord(models.Model): #Bệnh án
     schedule = models.OneToOneField(Schedule, on_delete=models.CASCADE, related_name='medical_record')

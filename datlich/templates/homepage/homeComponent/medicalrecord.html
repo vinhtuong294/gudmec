@@ -74,13 +74,22 @@
         .disable-1 {
             display: none;
         }
+        .user-3{
+            display: none;
+        }
     </style>
 </head>
 
 <body>
 
     <div class="container" id="schedule_id" data-value="{{schedule_id}}">
-        <h2>Bệnh Án Của Bệnh Nhân</h2>
+        <h2>
+            {% if role %}
+            Bệnh Án Của Tôi
+            {% else %}
+            Bệnh Án Của Bệnh Nhân
+            {% endif %}
+            </h2>
 
         <!-- Thông tin bệnh nhân -->
         <div class="mb-4">
@@ -128,7 +137,7 @@
         </div>
 
         <!-- Thêm Bệnh Án Mới -->
-        <form id="add-medical-record-form" class="disable-{{state}}">
+        <form id="add-medical-record-form" class="disable-{{state}} user-{{role}}">
             <h4 class="mt-4">Thêm Bệnh Án Mới</h4>
             <div class="mb-3">
                 <label for="description" class="form-label">Mô Tả Triệu Chứng</label>
