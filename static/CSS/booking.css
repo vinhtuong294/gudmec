@@ -110,6 +110,10 @@ body>div {
     overflow: hidden;
 }
 
+.booking-doctor .input-date #input-date {
+    padding: 0 10px;
+}
+
 .view-booking {
     display: flex;
     flex-direction: column;
@@ -123,15 +127,19 @@ body>div {
     position: relative;
     display: flex;
     flex-wrap: wrap;
+    margin-top: 10px;
+    gap: 8px;
+    justify-content: center;
     z-index: 5;
     transition: all 0.3s ease;
 }
 
 .date-and-countAvailable {
     position: relative;
-    width: 84px;
-    height: 53px;
-    margin: 17px 16px 8px 19px;
+    width: 88px;
+    height: 57px;
+    /* margin: 17px 16px 8px 19px; */
+    padding: 4px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -140,6 +148,10 @@ body>div {
     border: 1px solid rgb(228, 232, 236);
     text-align: center;
     cursor: pointer;
+}
+
+.date-and-countAvailable .date-status {
+    font-size: 11px;
 }
 
 .date-and-countAvailable.active {
@@ -239,9 +251,10 @@ body>div {
 }
 
 .btn-submit {
+    opacity: 0.5;
+    pointer-events: none;
     position: relative;
     width: 330px;
-    height: 40px;
     text-align: center;
     margin-top: 5px;
     margin-left: 31px;
@@ -278,7 +291,7 @@ body>div {
     font-weight: 400;
 }
 
-.isavailable {
+.isavailable .date-status {
     color: rgb(141, 183, 129);
 }
 
@@ -311,10 +324,6 @@ body>div {
 
 .title-detail {
     color: rgb(45, 135, 243);
-}
-
-.modal-body-content {
-    white-space: pre-wrap;
 }
 
 .modal-close {

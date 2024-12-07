@@ -7,55 +7,135 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-        }
-        h1 {
-            text-align: center;
+            background: linear-gradient(to bottom, #f0f4f8, #e2e8ed);
+            margin: 0;
+            padding: 0;
             color: #333;
         }
+    
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin: 20px 0;
+        }
+    
         .container {
             max-width: 800px;
-            margin: auto;
-            background-color: white;
+            margin: 30px auto;
+            background-color: #ffffff;
             padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease-in-out;
         }
-        .doctor-info, .appointment-info, .review-section {
-            margin-bottom: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+    
+        .doctor-info, .appointment-info, .medical-record-info, .review-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background: #fafafa;
         }
-        .doctor-info h2, .appointment-info h2, .review-section h2 {
-            color: #4CAF50;
+    
+        .doctor-info h2, .appointment-info h2, .medical-record-info h2, .review-section h2 {
+            color: #3498db;
+            border-bottom: 2px solid #3498db;
+            display: inline-block;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
         }
+    
+        p {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+    
+        strong {
+            color: #2c3e50;
+        }
+    
         .star-rating {
             display: flex;
-            direction: row-reverse;
-            justify-content: flex-end;
+            flex-direction: row-reverse; /* Sắp xếp từ phải sang trái */
+            justify-content: flex-end; /* Căn các sao về phía bên phải */
+            gap: 5px; /* Khoảng cách giữa các sao */
             margin: 10px 0;
         }
+        
         .star-rating input {
-            display: none;
+            display: none; /* Ẩn input radio */
         }
+        
         .star-rating label {
             font-size: 30px;
-            color: #ddd;
+            color: #ddd; /* Màu sao chưa chọn */
             cursor: pointer;
+            transition: color 0.3s ease;
         }
+        
         .star-rating input:checked ~ label {
-            color: #f39c12;
+            color: #f39c12; /* Màu sao đã chọn */
         }
+        
         .star-rating label:hover,
         .star-rating label:hover ~ label {
-            color: #f39c12;
+            color: #f39c12; /* Màu sao khi rê chuột */
         }
-        .review {
-            margin-bottom: 10px;
+    
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            resize: none;
+            font-family: inherit;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+    
+        button:hover {
+            background-color: #2980b9;
+        }
+    
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+    
+            h1 {
+                font-size: 2rem;
+            }
+    
+            p {
+                font-size: 0.9rem;
+            }
         }
     </style>
+    
 </head>
 <body>
     <h1>Chi Tiết Cuộc Đặt Khám</h1>
@@ -73,9 +153,8 @@
 
         <div class="appointment-info">
             <h2>Thông Tin Cuộc Hẹn</h2>
-            <p><strong>Ngày Khám:</strong> {{ appointment.date }}</p>
+            <p><strong>Ngày Khám:</strong> {{ appointment.date | date:' d / m / Y' }}</p>
             <p><strong>Ca Khám:</strong> {{ appointment.shift.time_start }} - {{ appointment.shift.time_end }} </p>
-            <p><strong>Trạng Thái:</strong> {{ appointment.state }}</p>
         </div>
 
         <div class="medical-record-info">
@@ -87,9 +166,28 @@
 
         <div class="review-section">
             <h2>Đánh Giá Bác Sĩ</h2>
-            <form method="POST" action="" id="doctor_id" data-value="{{appointment.doctor.id}}">
+            {% if rate != None %}
+            <form method="POST" action="" id="doctor_id" data-value="{{ appointment.doctor.id }}">
                 <div class="star-rating">
-                    <input type="radio" id="star5" name="rating" value="5" required>
+                    <input type="radio" id="star5" name="rating" value="5" {% if rate.rate == 5 %}checked{% endif %}>
+                    <label for="star5" title="5 sao">★</label>
+                    <input type="radio" id="star4" name="rating" value="4" {% if rate.rate == 4 %}checked{% endif %}>
+                    <label for="star4" title="4 sao">★</label>
+                    <input type="radio" id="star3" name="rating" value="3" {% if rate.rate == 3 %}checked{% endif %}>
+                    <label for="star3" title="3 sao">★</label>
+                    <input type="radio" id="star2" name="rating" value="2" {% if rate.rate == 2 %}checked{% endif %}>
+                    <label for="star2" title="2 sao">★</label>
+                    <input type="radio" id="star1" name="rating" value="1" {% if rate.rate == 1 %}checked{% endif %}>
+                    <label for="star1" title="1 sao">★</label>
+                </div>
+                <textarea name="comment" placeholder="Nhập ý kiến đánh giá của bạn" rows="3" required>{{ rate.content }}</textarea>
+                <br>
+                <button type="submit">Sửa Đánh Giá</button>
+            </form>
+            {% else %}
+            <form method="POST" action="" id="doctor_id" data-value="{{ appointment.doctor.id }}">
+                <div class="star-rating">
+                    <input type="radio" id="star5" name="rating" value="5">
                     <label for="star5" title="5 sao">★</label>
                     <input type="radio" id="star4" name="rating" value="4">
                     <label for="star4" title="4 sao">★</label>
@@ -104,8 +202,9 @@
                 <br>
                 <button type="submit">Gửi Đánh Giá</button>
             </form>
-
+            {% endif %}
         </div>
+        
     </div>
     <script>
         function getCookie(name) {
@@ -145,8 +244,12 @@
         
                 if (response.ok) {
                     const result = await response.json();
-                    alert('Gửi đánh giá thành công!');
-                    document.querySelector('form').reset();
+                    toast({
+                        title: 'Thành công',
+                        msg: 'Thành công!',
+                        type: 'succeces',
+                        duration: 5000
+                      })
                 } else {
                     const errorData = await response.json();
                     alert('Gửi đánh giá thất bại: ' + (errorData.message || 'Đã có lỗi xảy ra.'));

@@ -71,3 +71,12 @@ class PatientService:
             "birthday": schedule.patient.user.birthday,
             "gender": schedule.patient.user.gender,
         }
+    def update_patient_info(self,user_id, data):
+        patient = Patient.objects.get(user_id=user_id)
+        patient.benhnen = data["benhnen"]
+        patient.chieucao = data["chieucao"]
+        patient.cannang = data["cannang"]
+        patient.nhommau = data["nhommau"]
+        patient.save()
+        return patient
+    

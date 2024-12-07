@@ -6,6 +6,7 @@ class DoctorService:
         return Doctor.objects.all()
     def get_one_doctors(self,id):
         doctor = Doctor.objects.select_related('department','user').get(id=id)
+        
         return {
             "id": doctor.id,
             "name": doctor.user.fullname,
@@ -15,4 +16,5 @@ class DoctorService:
             "service_prices": doctor.service_prices,
             "department": doctor.department.name_department,
             "avatar":doctor.avatar,
+            "average_rating":doctor.average_rate
         }

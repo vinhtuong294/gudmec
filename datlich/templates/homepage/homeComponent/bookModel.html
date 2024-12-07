@@ -6,7 +6,7 @@
                 <div class="cout-available 'isavailable' ">
                     {{ booking_item.time_start|date:"H:i" }}  - {{ booking_item.time_end|date:"H:i" }}
                 </div>
-                <div>
+                <div class="date-status">
                     {% if booking_item.is_my_schedule %}
                         Đã đặt
                     {% elif booking_item.is_ready %}

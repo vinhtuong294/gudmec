@@ -27,6 +27,7 @@ urlpatterns = [
     path('my-medical-record/', MyMedicalRecord.as_view(), name='mymedicalrecord'),
     path('my-schedule/<int:id>/detail/', MyScheduleDetail.as_view(), name='my-schedule-detail'),
     path('rate/<int:id>/', Rate.as_view(), name='rate'),
+    path('my-health/', MyHealth.as_view(), name='myhealth'),
 
 ]
 if settings.DEBUG:

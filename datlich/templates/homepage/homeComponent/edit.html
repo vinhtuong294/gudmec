@@ -23,7 +23,17 @@
             width: 250px;
             margin-bottom: 10px;
             font-weight: 500;
-            background-color: #f6f6f6
+            background-color: #f6f6f6;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .sidebar-item:hover,
+        .sidebar-item.active {
+        background-color: rgba(83,164,209,0.2);
+        }
+        .main-content{
+            margin-left: 100px;
+            padding: 20px;
         }
     </style>
 
@@ -55,7 +65,7 @@
     <div class="content">
         <aside class="sidebar">
             <a class="sidebar-item" data-id="profile" onclick="navigate(this, '{% url 'edit' %}')">Hồ sơ của tôi</a>
-            <a class="sidebar-item" data-id="health" onclick="navigate(this, }')">Sức khỏe của tôi</a>
+            <a href="/my-health/" class="sidebar-item" data-id="health" onclick="navigate(this, }')">Sức khỏe của tôi</a>
             <a href = "/appointmenthistory/" alt='' class="sidebar-item" data-id="history" >Lịch sử đặt lịch</a>
             <a href = "/my-medical-record/" alt='' class="sidebar-item" data-id="history" >Bệnh án của tôi</a>
             <a class="sidebar-item" data-id="help" onclick="setActive(this)">Trợ giúp</a>
@@ -177,11 +187,13 @@
                         })
                         .then(response => {
                             if (!response.ok) throw new Error('Failed to update user');
+                            toast({
+                                title: 'Thành công',
+                                msg: 'Chỉnh sửa thông tin thành công!',
+                                type: 'succeces',
+                                duration: 5000
+                              })
                             return response.json();
-                        })
-                        .then(data => {
-                            successMessage.textContent = 'User updated successfully!';
-                            successMessage.style.display = 'block';
                         })
                         .catch(error => {
                             errorMessage.textContent = 'Failed to update user: ' + error.message;

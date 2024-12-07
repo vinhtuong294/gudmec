@@ -278,8 +278,10 @@ class booking_doctor(APIView):
 
             scheduleServices = ScheduleService()
             doctorService = DoctorService()
+            rateService = RateService()
             shifts = scheduleServices.get_schedules_by_doctor(user.id,doctor_id,date)
             doctor = doctorService.get_one_doctors(doctor_id)
+            rates = rateService.get_rate_doctor(doctor_id)
             if date:
                 shifts = scheduleServices.get_schedules_by_doctor(user.id,doctor_id,date)
                 context = {
@@ -291,7 +293,8 @@ class booking_doctor(APIView):
                 "view": "homepage/homeComponent/bookAppointment.html",
                 "file": "bookAppointment",
                 "booking_list": shifts,
-                "doctor": doctor
+                "doctor": doctor,
+                "rates": rates,
             }
 
             return render(request, "homepage/index.html", context)
@@ -555,14 +558,17 @@ class MyScheduleDetail(APIView):
         token = request.COOKIES.get('authToken')
         user = authenticate_service.get_user_from_token(token)
         if user.role_id == 3:
+            rateService= RateService()
             schedule = schedule_service.get_one_with_all(id)
             record = medicalRecordService.get_record_schedule(id)
+            rate = rateService.get_my_rate_doctor(user.id,schedule.doctor.id)      
             context = {
                 "nav": "partials/navLogged.html",
                 "view": "homepage/homeComponent/myScheduleDetail.html",
                 "file": "myScheduleDetail",
                 "appointment": schedule,
                 "record": record,
+                "rate": rate,
             }
 
             return render(request, "homepage/index.html", context)
@@ -581,5 +587,35 @@ class Rate(APIView):
                 "content": content,
             }
             print(data)
-            rateService.create_rate(user.id,id,data)
+            rateService.create_update_rate(user.id,id,data)
             return Response('Rate successfully')
+        
+class MyHealth(APIView):    
+    permission_classes = [AllowAny]
+    def get(self, request):
+        authenticate_service = AuthenticateService
+        patientService = PatientService()
+        token = request.COOKIES.get('authToken')
+        user = authenticate_service.get_user_from_token(token)
+        patient = patientService.get_patient_by_user_id(user.id)
+        if user.role_id==3 :
+            context = {
+                "nav": "partials/navDoctorLogged.html",
+                "view": "homepage/homeComponent/medicalInfo.html",
+                "file": "medicalInfo",
+                "patient":patient,
+            }
+
+            return render(request, "homepage/index.html", context)
+    def put(self, request):
+        data = request.data
+        print(data)
+        authenticate_service = AuthenticateService
+        pantientService =  PatientService()
+        token = request.COOKIES.get('authToken')
+        user = authenticate_service.get_user_from_token(token)
+        if user.role_id==3 :
+            pantientService.update_patient_info(user.id, data)
+            return Response({
+                "message": "Cập nhật thành công"
+            }, status=status.HTTP_200_OK)

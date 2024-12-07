@@ -6,6 +6,45 @@ from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 import os
 
+
+
+
+# class UserModelManager(BaseUserManager):
+#     def create_user(self, username, password=None, **extra_fields):
+#         """Tạo và trả về người dùng với mật khẩu mã hóa"""
+#         if not username:
+#             raise ValueError('The Username field must be set')
+#         user = self.model(username=username, **extra_fields)
+#         user.set_password(password)  # Mã hóa mật khẩu trước khi lưu
+#         user.save(using=self._db)
+#         return user
+
+#     def create_superuser(self, username, password=None, **extra_fields):
+#         """Tạo và trả về người dùng superuser"""
+#         extra_fields.setdefault('is_staff', True)
+#         extra_fields.setdefault('is_superuser', True)
+#         return self.create_user(username, password, **extra_fields)
+
+
+# class UserModel(AbstractBaseUser, PermissionsMixin):
+#     username = models.CharField(max_length=150, unique=True)
+#     password = models.CharField(max_length=128)
+#     enabled = models.BooleanField(default=True)
+#     fullname = models.CharField(max_length=255)
+#     gender = models.BooleanField()
+#     birthday = models.DateField()
+#     email = models.EmailField(unique=True)
+#     telephone = models.CharField(max_length=15, unique=True)
+#     role = models.ForeignKey('Role', on_delete=models.CASCADE, related_name='users')
+
+#     USERNAME_FIELD = 'username'  # Trường dùng làm tên đăng nhập
+#     REQUIRED_FIELDS = ['email', 'fullname', 'birthday', 'telephone']
+
+#     objects = UserModelManager()
+
+#     def __str__(self):
+#         return self.fullname
+
 # Enum classes
 class ERole(models.TextChoices):
     PATIENT = 'PATIENT', _('Patient')
@@ -28,23 +67,20 @@ class Role(models.Model):
     def __str__(self):
         return self.get_name_display()
 
-
 class UserModelManager(BaseUserManager):
     def create_user(self, username, password=None, **extra_fields):
-        """Tạo và trả về người dùng với mật khẩu mã hóa"""
         if not username:
             raise ValueError('The Username field must be set')
         user = self.model(username=username, **extra_fields)
-        user.set_password(password)  # Mã hóa mật khẩu trước khi lưu
+        user.set_password(password)
         user.save(using=self._db)
         return user
 
     def create_superuser(self, username, password=None, **extra_fields):
-        """Tạo và trả về người dùng superuser"""
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('role', Role.objects.get(id=1))
         return self.create_user(username, password, **extra_fields)
-
 
 class UserModel(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=150, unique=True)
@@ -57,13 +93,18 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     telephone = models.CharField(max_length=15, unique=True)
     role = models.ForeignKey('Role', on_delete=models.CASCADE, related_name='users')
 
+    # Thêm hai trường này
+    is_staff = models.BooleanField(default=False)  # Cho phép truy cập admin
+    is_superuser = models.BooleanField(default=False)  # Quyền quản trị viên
+
     USERNAME_FIELD = 'username'  # Trường dùng làm tên đăng nhập
-    REQUIRED_FIELDS = ['email', 'fullname', 'birthday', 'telephone']
+    REQUIRED_FIELDS = ['email', 'fullname', 'birthday', 'telephone','is_staff', 'is_superuser','gender','role' ]
 
     objects = UserModelManager()
 
     def __str__(self):
         return self.fullname
+
 
     def check_password(self, raw_password):
         # So sánh mật khẩu được mã hóa với mật khẩu nhập vào
@@ -100,6 +141,7 @@ class Rate(models.Model):
     rate = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='rates')
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='user_rates')
+    date = models.DateField(auto_now_add=True, null=True)
 
 class Patient(models.Model): #bệnh nhân
     name = models.CharField(max_length=255)

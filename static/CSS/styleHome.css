@@ -89,12 +89,12 @@
     margin-top: 20px;
 }
 
-.list-bs .container .row .card-bs .card .card-body{
-   height: 100px;
-   margin-left: -20px;
+.list-bs .container .row .card-bs .card .card-body {
+    height: 100px;
+    margin-left: -20px;
 }
 
-.list-bs .container .row .card-bs .card .card-body .card-text{
+.list-bs .container .row .card-bs .card .card-body .card-text {
     color: black;
     font-weight: 700;
 }
@@ -401,23 +401,26 @@ nav .nav-link {
     top: 50px;
 }
 
-.logo-and-contact{
+.logo-and-contact {
     display: flex;
     color: whitesmoke;
     padding-left: 50px;
 }
-.contact-us{
+
+.contact-us {
     padding-left: 750px;
     padding-top: 50px;
     font-size: 1.1rem;
 }
-.contact-title-text{
+
+.contact-title-text {
     font-weight: 500;
     padding-left: 40px;
-    color: rgb(93,102,204);
+    color: rgb(93, 102, 204);
     text-decoration: underline;
 }
-.read-text{
+
+.read-text {
     padding-left: 350px;
     font-size: 0.85rem;
     font-weight: 500;
@@ -425,6 +428,28 @@ nav .nav-link {
     white-space: pre-wrap;
     color: whitesmoke;
 }
-.contact-phone1-text{
+
+.contact-phone1-text {
     padding-left: 4px;
+}
+
+.table-responsive {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.table-responsive td {
+    border: 1px solid #ccc;
+}
+
+.table-responsive th {
+    border: 1px solid #ccc;
+}
+
+.table-responsive td:last-child {
+    border-right: none;
+}
+
+.table-responsive th:last-child {
+    border-right: none;
 }

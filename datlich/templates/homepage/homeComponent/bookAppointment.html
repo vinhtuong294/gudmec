@@ -9,6 +9,164 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 <body>
+    <style>
+        /* Tổng thể phần chi tiết bác sĩ và đánh giá */
+.detail-and-booking {
+    margin-top: 30px;
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.detail-doctor {
+    margin-bottom: 40px;
+}
+
+/* Tiêu đề thông tin chi tiết */
+.title-detail {
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* Nội dung thông tin chi tiết */
+.detail-content {
+    font-size: 1.1em;
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+/* Phần đánh giá người dùng */
+.reviews-section {
+    margin-top: 40px;
+}
+
+.reviews-section h5 {
+    font-size: 1.6em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+#reviews-list {
+    margin-top: 20px;
+}
+
+/* Mỗi bình luận */
+.review-item {
+    background-color: #f9f9f9;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.reviewer-name {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.review-stars {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.star {
+    font-size: 1.2em;
+    color: #ddd;
+    margin-right: 5px;
+    transition: color 0.3s ease;
+}
+
+.star.filled {
+    font-size: 18px;
+    color: gold;
+}
+.star-comment.filled {
+    color: gold;
+}
+
+.rating-number {
+    margin-left: 10px;
+    font-size: 1.1em;
+    color: #555;
+}
+
+.star-comment{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+/* Nội dung đánh giá */
+.review-content {
+    font-size: 1.1em;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+/* Ngày đánh giá */
+.review-date {
+    font-size: 0.9em;
+    color: #777;
+    font-style: italic;
+}
+
+/* Phần đánh giá trung bình */
+.doctor-rating {
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* Tiêu đề đánh giá */
+.doctor-rating p {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Cấu trúc hiển thị sao */
+.star-rating {
+    display: flex;
+    align-items: center;
+}
+
+.star {
+    font-size: 2em; /* Kích thước ngôi sao */
+    color: #ddd; /* Màu xám cho sao chưa được đánh giá */
+    margin-right: 5px;
+    transition: color 0.3s ease; /* Hiệu ứng chuyển màu mượt mà */
+}
+
+.star.filled {
+    color: gold; /* Màu vàng cho sao đã được đánh giá */
+}
+
+/* Hiển thị số đánh giá */
+.star-rating span {
+    margin-left: 10px;
+    font-size: 1.1em;
+    color: #555;
+    font-style: italic;
+}
+
+
+    </style>
 <div class="booking-body">
     <div class="container container-custom4">
         <!-- Thông tin bác sĩ -->
@@ -23,8 +181,20 @@
                         <p class="card-text">{{ doctor.name }}</p>
                         <div class="servicePrices card-text">
                             <p class="card-text">Phí dịch vụ</p>
-                            <p class="card-text txt-price">{{ doctor.service_price }}</p>
+                            <p class="card-text txt-price">{{ doctor.service_prices }}</p>
+                            <i class="fa-solid fa-dong-sign icon-dong"></i>
                         </div>
+                        <div class="card-text">
+                            <div style='display:flex'>
+                                <strong>Đánh giá trung bình:</strong> 
+                                <div class="star-rating" id="avg-rating">
+                                    <span>{{ doctor.average_rating }}</span>
+                                    <span class="star filled">★</span>
+                                </div>
+                            </div>
+                        </div>
+                            <!-- Hiển thị đánh giá trung bình -->
+                            
                     </div>
                 </div>
             </div>
@@ -37,6 +207,32 @@
             <section class="detail-doctor">
                 <h5 class="title-detail">Thông tin chi tiết</h5>
                 <p class="detail-content">{{ doctor.description }}</p>
+
+                <div class="reviews-section">
+                    <h5>Đánh Giá Của Người Dùng</h5>
+                    <div id="reviews-list">
+                        {% for rate in rates %}
+                        <div class="review-item">
+                            <div class="review-header">
+                                <span class="reviewer-name">{{ rate.user.fullname }}</span>
+                                <div class="review-stars">
+                                    <span class="rating-number">{{ rate.rate}}</span>
+                                    <span class="star-comment filled">★</span>
+                                </div>
+                            </div>
+                            <div class="review-content">
+                                <p>{{ rate.content }}</p>
+                            </div>
+                            <div class="review-date">
+                                <span>Đánh giá vào: {{ rate.date|date:"d/m/Y" }}</span>
+                            </div>
+                        </div>
+                        {% empty %}
+                            <p>Chưa có đánh giá nào.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                
             </section>
 
             <div id="dynamic-booking-div">
@@ -49,7 +245,6 @@
                     <!-- Chọn giờ khám -->
                     <div class="view-booking">
                         <div class="booking-model">
-                            <i id="left-click" class="fa-solid fa-chevron-left"></i>
                             <div id="dynamic-content">
                                 <div class="view-booking-model" style="left: 0px;">
                                     {% for booking_item in booking_list %}
@@ -58,7 +253,7 @@
                                                 <div class="cout-available 'isavailable' ">
                                                     {{ booking_item.time_start|date:"H:i" }}  - {{ booking_item.time_end|date:"H:i" }}
                                                 </div>
-                                                <div>
+                                                <div class="date-status">
                                                     {% if booking_item.is_my_schedule %}
                                                         Đã đặt
                                                     {% elif booking_item.is_ready %}
@@ -72,7 +267,6 @@
                                     {% endfor %}
                                 </div>
                             </div>
-                            <i id="right-click" class="fa-solid fa-chevron-right"></i>
                         </div>
                         <div class="list-shift"></div>
                         <div class="price">
@@ -153,6 +347,7 @@
         inputDate.value = formattedDate;
     });
     const bookingItems = document.querySelectorAll(".date-and-countAvailable");
+    const confirmButton = document.querySelector('.btn-submit');
 
     document.querySelector("#dynamic-content").addEventListener("click", (e) => {
         if (e.target.closest(".date-and-countAvailable")) {
@@ -160,10 +355,13 @@
             schedule_id = shift.dataset.value;
             // Xóa lớp 'active' khỏi tất cả các mục
             document.querySelectorAll(".date-and-countAvailable").forEach(item => item.classList.remove("active"));
-    
+            confirmButton.style.opacity = 0.5
+            confirmButton.style.pointerEvents = "none";
             // Thêm lớp 'active' vào mục được chọn
             if(shift.classList.contains("isavailable")){
                 shift.classList.add("active");
+                confirmButton.style.opacity = 1
+                confirmButton.style.pointerEvents = "auto";
             }
             if(shift.classList.contains("isBooked")){
                 modalClose.classList.add("active");

@@ -52,7 +52,7 @@ class ScheduleService:
         ] 
     def get_schedules_by_user(self,user_id):
         schedules = Schedule.objects.select_related('shift','patient__user','doctor__user').all()
-        schedules =  schedules.filter(patient__user_id=user_id)
+        schedules =  schedules.filter(patient__user_id=user_id).order_by("-id")
         return [{
             "id": schedule.id,
             "date": schedule.date,
