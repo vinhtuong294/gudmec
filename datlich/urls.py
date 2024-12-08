@@ -15,7 +15,6 @@ urlpatterns = [
     path('password-reset/',views.password_reset, name="password_reset"),
     path('homepage/', home_page.as_view(), name='homepage'),
     path('api/logout/', LogoutView.as_view(), name='logout'),
-    path('search/', search_result, name='search_result'),
     path('api/doctors-in-department/<int:department_id>/', views.fillter_doctor.as_view()),
     path('appointment/<int:doctor_id>/', booking_doctor.as_view(), name='appointment'),
     path('edit/', Edit_user.as_view(), name='edit'),
@@ -28,7 +27,11 @@ urlpatterns = [
     path('my-schedule/<int:id>/detail/', MyScheduleDetail.as_view(), name='my-schedule-detail'),
     path('rate/<int:id>/', Rate.as_view(), name='rate'),
     path('my-health/', MyHealth.as_view(), name='myhealth'),
-
+    path('doi-ngu-bac-si/', DoiNguBacSi.as_view(), name='doi-ngu-bac-si'),
+    path('comment/<int:id>/', Comment.as_view(), name='comment'),
+    path('like/<int:id>/', Like.as_view(), name='like'),
+    path('gudmec/', gudmec.as_view(), name='gudmec'),
+    path('chuyenkhoa/', chuyenkhoa.as_view(), name='chuyenkhoa'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

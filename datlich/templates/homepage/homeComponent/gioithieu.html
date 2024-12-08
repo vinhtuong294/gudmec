@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+{% load static%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bệnh Viện Gudmec</title>
+</head>
+<body>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #0077b6, #00b4d8);
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+        }
+        
+        .header .hospital-name {
+            font-size: 3em;
+            margin: 0;
+            font-weight: bold;
+        }
+        
+        .header .tagline {
+            font-size: 1.5em;
+            margin-top: 10px;
+        }
+        
+        .content {
+            padding: 20px 0;
+        }
+        
+        .section-title {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #0077b6;
+            border-bottom: 3px solid #00b4d8;
+            display: inline-block;
+        }
+        
+        .about-content {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .about-img {
+            width: 50%;
+            border-radius: 10px;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .service-card {
+            background: #eaf4f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .facilities-gallery {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .facilities-gallery img {
+            width: 30%;
+            border-radius: 10px;
+        }
+        
+        .testimonials {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .testimonial {
+            background: #e0f7fa;
+            padding: 20px;
+            border-left: 5px solid #0077b6;
+            border-radius: 8px;
+        }
+        
+        .footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 20px;
+        }
+        
+    </style>
+    <header class="header">
+        <div class="container">
+            <h1 class="hospital-name">Bệnh Viện Gudmec</h1>
+            <p class="tagline">Nơi Khỏe Mạnh Bắt Đầu</p>
+        </div>
+    </header>
+
+    <main class="content">
+        <div class="container">
+            <!-- Section: Introduction -->
+            <section class="about-section">
+                <h2 class="section-title">Giới Thiệu</h2>
+                <div class="about-content">
+                    <img src="{% static 'images/hospital.jpg' %}" alt="Hình ảnh bệnh viện Gudmec" class="about-img">
+                    <p>
+                        Được thành lập vào năm 2010, bệnh viện Gudmec là trung tâm y tế hàng đầu Việt Nam với mục tiêu cung cấp dịch vụ chăm sóc sức khỏe tiêu chuẩn quốc tế. 
+                        Với đội ngũ bác sĩ đầu ngành, cơ sở vật chất hiện đại và phương pháp điều trị tiên tiến, Gudmec là điểm đến đáng tin cậy của hàng triệu bệnh nhân mỗi năm.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Section: Services -->
+            <section class="services-section">
+                <h2 class="section-title">Dịch Vụ Nổi Bật</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <h3>Khám Chuyên Khoa</h3>
+                        <p>Đội ngũ bác sĩ giàu kinh nghiệm trong các lĩnh vực: Tim mạch, Nhi khoa, Nội tiết, và nhiều chuyên khoa khác.</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>Phẫu Thuật Hiện Đại</h3>
+                        <p>Công nghệ phẫu thuật robot tiên tiến, giúp giảm đau đớn và thời gian hồi phục.</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>Chăm Sóc Sản Phụ</h3>
+                        <p>Dịch vụ chăm sóc mẹ và bé toàn diện với đội ngũ chuyên gia sản phụ khoa hàng đầu.</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>Phục Hồi Chức Năng</h3>
+                        <p>Trang thiết bị phục hồi hiện đại, giúp bệnh nhân cải thiện chất lượng cuộc sống.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Facilities -->
+            <section class="facilities-section">
+                <h2 class="section-title">Cơ Sở Vật Chất</h2>
+                <p>
+                    Bệnh viện Gudmec tự hào sở hữu hệ thống cơ sở vật chất hiện đại, bao gồm các phòng điều trị cao cấp, phòng thí nghiệm đạt chuẩn quốc tế, 
+                    và hệ thống xét nghiệm tự động. Môi trường bệnh viện thân thiện, sạch sẽ và được quản lý nghiêm ngặt để đảm bảo sự thoải mái tối đa cho bệnh nhân.
+                </p>
+                <div class="facilities-gallery">
+                    <img src="{% static 'images/facility1.jpg' %}" alt="Facility 1">
+                    <img src="{% static 'images/facility2.jpg' %}" alt="Facility 2">
+                    <img src="{% static 'images/facility3.jpg' %}" alt="Facility 3">
+                </div>
+            </section>
+
+            <!-- Section: Testimonials -->
+            <section class="testimonials-section">
+                <h2 class="section-title">Cảm Nhận Từ Bệnh Nhân</h2>
+                <div class="testimonials">
+                    <div class="testimonial">
+                        <p>“Tôi thật sự hài lòng với dịch vụ của bệnh viện Gudmec. Từ lúc nhập viện đến khi xuất viện, tôi luôn cảm thấy an tâm.”</p>
+                        <span>- Nguyễn Văn A</span>
+                    </div>
+                    <div class="testimonial">
+                        <p>“Đội ngũ bác sĩ rất tận tâm và chuyên nghiệp. Tôi cảm thấy được chăm sóc rất tốt tại đây.”</p>
+                        <span>- Trần Thị B</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Contact -->
+            <section class="contact-section">
+                <h2 class="section-title">Liên Hệ</h2>
+                <p>
+                    <strong>Địa chỉ:</strong> 78-82 Ngũ Hành Sơn, Quận Ngũ Hành Sơn, TP. Đà Nẵng<br>
+                    <strong>Hotline:</strong> 0397521031<br>
+                    <strong>Email:</strong> info@gudmec.vn<br>
+                    <strong>Website:</strong> www.gudmec.vn
+                </p>
+            </section>
+        </div>
+    </main>
+
+</body>
+</html>

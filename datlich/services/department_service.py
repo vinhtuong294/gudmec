@@ -4,6 +4,12 @@ from datetime import datetime, timedelta
 class DepartmentService:
     def get_all_departments(self):
         return Department.objects.all()
+    def get_all_departments_doctors(self):
+        departments =  Department.objects.all()
+        for department in departments:
+            doctors = department.list_doctors.select_related('user', 'department').all()
+            department.doctors_list = doctors
+        return departments
 
     def get_department_by_id(self, department_id):
         try:

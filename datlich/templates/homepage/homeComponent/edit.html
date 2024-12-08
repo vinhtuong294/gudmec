@@ -35,6 +35,16 @@
             margin-left: 100px;
             padding: 20px;
         }
+        .avatar-preview img {
+            display: block;
+            margin: 10px 0;
+            object-fit: cover;
+            border: 1px solid #ddd;
+        }
+
+        .footer-component{
+            top: 1300px !important;
+        }
     </style>
 
         <div class="pop-up">
@@ -68,17 +78,21 @@
             <a href="/my-health/" class="sidebar-item" data-id="health" onclick="navigate(this, }')">Sức khỏe của tôi</a>
             <a href = "/appointmenthistory/" alt='' class="sidebar-item" data-id="history" >Lịch sử đặt lịch</a>
             <a href = "/my-medical-record/" alt='' class="sidebar-item" data-id="history" >Bệnh án của tôi</a>
-            <a class="sidebar-item" data-id="help" onclick="setActive(this)">Trợ giúp</a>
         </aside>
 
         <main class="main-content">
             <h3 class="user-title-main">Thông tin tài khoản</h3>
             <div class="user-account">
-                <form class="user-form" method="POST" id="form-2">
-                    {% csrf_token %}
+                <form class="user-form" method="POST" id="form-2"  enctype="multipart/form-data">
                     <input type="hidden" id="user-id" name="user-id" value="{{ user.id }}">
                     <input type="hidden" id="password-id" name="password-id" value="{{ user.password }}">
-
+                    <div class="form-group">
+                        <label for="avatar">Avatar</label>
+                        <div class="avatar-preview">
+                            <img id="avatar-preview" src="{% if user.image %}{{ user.image.url }}{% endif %}" alt="User Avatar" style="width: 100px; height: 100px; border-radius: 50%;">
+                        </div>
+                        <input type="file" id="avatar" name="avatar" class="form-control">
+                    </div>                    
                     <div class="form-group">
                         <label for="username">Tên đăng nhập <span class="text-danger"></span></label>
                         <input id="username" name="username" type="text" placeholder="Tên đăng nhập" class="form-control"
@@ -146,6 +160,18 @@
         const token = getCookie("authToken");
         document.addEventListener('DOMContentLoaded', function () {
             const form = document.querySelector('#form-2');
+            const avatarInput = document.getElementById('avatar');
+            const avatarPreview = document.getElementById('avatar-preview');
+            avatarInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        avatarPreview.src = e.target.result;
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
             if (form) {
                 form.addEventListener('submit', (e) => {
                     e.preventDefault();
@@ -168,22 +194,14 @@
                     errorMessage.style.display = 'none';
                     successMessage.style.display = 'none';
 
-
+                    const formData = new FormData(form);
                     function handleUpdateUser() {
-                        const userData = {
-                            "phone": phone,
-                            "fullname": fullname,
-                            "gender": gender,
-                            "birthday": birthday,
-                        };
-
                         fetch(`/edit/`, {
-                            method: 'PUT',
+                            method: 'POST',
                             headers: {
-                                'Content-Type': 'application/json',
                                 'Authorization': `Bearer ${token}`
                             },
-                            body: JSON.stringify(userData)
+                            body: formData,
                         })
                         .then(response => {
                             if (!response.ok) throw new Error('Failed to update user');
@@ -203,7 +221,7 @@
 
                     if(newPasswordInput && newPasswordInput.trim()!==""){
                         fetch("/edit/", {
-                            method: 'POST',
+                            method: 'PUT',
                             headers: {
                                 'Content-Type': 'application/json',
                                 'Authorization': `Bearer ${token}`
@@ -214,11 +232,13 @@
                             })
                         })
                         .then(response => {
+                            toast({
+                                title: 'Thành công',
+                                msg: 'Chỉnh sửa thông tin thành công!',
+                                type: 'succeces',
+                                duration: 5000
+                              })
                             return response.json();
-                        })
-                        .then(data => {
-                            successMessage.textContent = 'Change password successfully!';
-                            successMessage.style.display = 'block';
                         })
                         .catch(error => {
                             errorMessage.textContent = 'Failed to update user: ' + error.message;

@@ -25,10 +25,13 @@ from .services.medicalRecordServices import MedicalRecordService
 from .services.doctor_service  import DoctorService
 from .services.articleService  import ArticleService
 from .services.rateService  import RateService
+from .services.likeService  import LikeService
+from .services.commentService  import CommentService
 import json
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -187,49 +190,6 @@ class LogoutView(APIView):
         return response
 
 
-def search_result(request):
-    return render(request, 'homepage/homeComponent/search_result.html')
-
-
-
-def medicalRecordInforPageComponent(request):
-    # Lấy danh sách hồ sơ bệnh án từ cơ sở dữ liệu
-    list_medical_records = MedicalRecord.objects.all()
-
-    # Truyền dữ liệu vào template
-    context = {
-        'list_medical_records': list_medical_records}
-    return render(request, 'homepage/homeComponent/medicalRecordInforPageComponent.html', context)
-
-def prosess_page(request):
-    process_steps = [
-        {'title': 'Đăng ký khám, xuất trình giấy tờ tùy thân và BHYT tại quầy Lễ tân',
-         'description': 'Khách hàng xuất trình giấy tờ tùy thân và thẻ BHYT tại quầy lễ tân. Nhân viên bộ phận Lễ tân đối chiếu thông tin thẻ BHYT và giấy tờ tùy thân, tiến hành đăng ký lịch khám với bác sĩ theo yêu cầu của khách hàng.'},
-        {'title': 'Thực hiện kiểm tra sinh hiệu tại quầy Điều dưỡng ở phòng khám',
-         'description': 'Khách hàng theo số thứ tự khám bệnh đã lấy từ quầy Lễ tân đến quầy Điều dưỡng phòng khám để được kiểm tra sinh hiệu.'},
-        {'title': 'Gặp bác sĩ khám và chẩn đoán',
-         'description': 'Các bác sĩ, chuyên gia đầu ngành trực tiếp thăm khám và đánh giá tình trạng; chẩn đoán, tư vấn và yêu cầu các chỉ định lâm sàng (xét nghiệm, X-quang, siêu âm…).'},
-        # Thêm các bước tiếp theo...
-        {'title': 'Thanh toán phí cận lâm sàng tại quầy Thu ngân',
-         'description': 'Khách hàng tiến hành thanh toán các khoản phí cận lâm sàng.'},
-        {'title':'Thực hiện các xét nghiệm cận lâm sàng theo chỉ định của bác sĩ',
-         'description':'Dựa trên chỉ định của bác sĩ mà khách hàng lần lượt tiến hành các xét nghiệm cận lâm sàng như siêu âm, xét nghiệm máu, chụp X-quang, MRI, CT scanner…'},
-        {'title':'Gặp bác sĩ đọc kết quả và tư vấn phương pháp điều trị',
-         'description':'Sau khi có đầy đủ kết quả kiểm tra cận lâm sàng cần thiết, khách hàng gặp bác sĩ để được tư vấn'
-                       ' tình trạng, phương pháp điều trị, cho toa thuốc, chỉ định nhập viện, chuyển viện hoặc hướng điều trị phù hợp và tốt'
-                       ' nhất cho từng khách hàng.'
-                        ' Khách hàng còn được tư vấn chế độ dinh dưỡng, tập luyện, các biện pháp phòng ngừa bệnh tật hiệu quả.'},
-        {'title':'Mua thuốc và thanh toán tại Nhà thuốc bệnh viện',
-         'description':'Đối với khách hàng không có BHYT: Khách hàng tiến hành mua thuốc và nghe hướng dẫn cách sử dụng thuốc.'
-        ' Đối với khách hàng có BHYT: Bộ phận Chăm sóc khách hàng, nhân viên Quầy Thu ngân giải đáp các thắc mắc của khách hàng về chính sách, quyền lợi tham gia BHYT đối với các khách hàng có BHYT. Khách hàng được hướng dẫn thủ tục ra viện (nếu nhập viện), được thông báo khoản chi phí cuối cùng phải thanh toán sau trừ thẻ BHYT. Khách hàng nhận lại thẻ BHYT cùng các giấy tờ tùy nhân.'
-                        ' Khách hàng nhận thuốc và được hướng dẫn, giải thích về liều lượng thuốc dùng theo chỉ định của bác sĩ.'}
-    ]
-    return render(request,'homepage/homeComponent/medical_examination_process_page.html',{'process_steps': process_steps})
-
-def price_of_gudmec(request):
-    return render(request, 'homepage/homeComponent/priceOfGudmec.html')
-
-
 
 # Lấy danh sách bác sĩ trong khoa
 class fillter_doctor(APIView):
@@ -358,41 +318,40 @@ class Edit_user(APIView):
                 }
 
                 return render(request, "homepage/index.html", context)
-    def put(self, request):
-        if request.method == "PUT":
-            authenticate_service = AuthenticateService
-            userService = UserService
-            token = request.COOKIES.get('authToken')
-            user = authenticate_service.get_user_from_token(token)
-            if user.role_id==3 :
-                phone = request.data.get('phone')
-                fullname = request.data.get('fullname')
-                gender = request.data.get('gender')
-                birthday = request.data.get('birthday')
-                updated_user = userService.update_user(user.id,phone,fullname,gender,birthday)
-                return Response({
-                    "message": "User updated successfully.",
-                    "user": {
-                        "id": updated_user.id,
-                        "fullname": updated_user.fullname,
-                        "telephone": updated_user.telephone,
-                        "gender": updated_user.gender,
-                        "birthday": updated_user.birthday
-                    }
-                }, status=status.HTTP_200_OK)
     def post(self, request):
-        if request.method == "POST":
-            authenticate_service = AuthenticateService
-            userService = UserService()
-            token = request.COOKIES.get('authToken')
-            user = authenticate_service.get_user_from_token(token)
-            if user.role_id==3 :
-                old_password = request.data.get('inputPassword')
-                new_password = request.data.get('newPassword')
-                updated_user = userService.change_password(user.id,old_password,new_password)
-                return Response({
-                    "message": "change password successfully."
-                }, status=status.HTTP_200_OK)
+        authenticate_service = AuthenticateService
+        userService = UserService
+        token = request.COOKIES.get('authToken')
+        user = authenticate_service.get_user_from_token(token)
+        if user.role_id==3 :
+            phone = request.POST.get('phone')
+            fullname = request.POST.get('fullname')
+            gender = request.POST.get('gender')
+            birthday = request.POST.get('birthday')
+            avatar = request.FILES.get('avatar')
+            updated_user = userService.update_user(user.id,phone,fullname,gender,birthday,avatar)
+            return Response({
+                "message": "User updated successfully.",
+                "user": {
+                    "id": updated_user.id,
+                    "fullname": updated_user.fullname,
+                    "telephone": updated_user.telephone,
+                    "gender": updated_user.gender,
+                    "birthday": updated_user.birthday
+                }
+            }, status=status.HTTP_200_OK)
+    def put(self, request):
+        authenticate_service = AuthenticateService
+        userService = UserService()
+        token = request.COOKIES.get('authToken')
+        user = authenticate_service.get_user_from_token(token)
+        if user.role_id==3 :
+            old_password = request.data.get('inputPassword')
+            new_password = request.data.get('newPassword')
+            userService.change_password(user.id,old_password,new_password)
+            return Response({
+                "message": "change password successfully."
+            }, status=status.HTTP_200_OK)
 
 
 class Appointment(APIView):
@@ -495,18 +454,20 @@ class Posts(APIView):
         token = request.COOKIES.get('authToken')
         user = authenticate_service.get_user_from_token(token)
         articleService =ArticleService()
-        posts = articleService.get_alls()
+        posts = articleService.get_alls(user.id)
+        department_service = DepartmentService
         context = {
             "view": "homepage/homeComponent/posts.html",
             "file": "posts",
-            "articles":posts
+            "articles":posts,
+            "listDepartmentResponse": department_service.get_all_departments(self),
         }
         if user.role_id==2 :
             context["nav"] = {"partials/navDoctorLogged.html"}
         if user.role_id==3 :
             context["nav"] = {"partials/navLogged.html"}
 
-        return render(request, "homepage/index.html", context)
+        return render(request, "homepage/homeComponent/posts.html", context)
     
 class AppointmentHistory(APIView):    
     permission_classes = [AllowAny]
@@ -595,14 +556,17 @@ class MyHealth(APIView):
     def get(self, request):
         authenticate_service = AuthenticateService
         patientService = PatientService()
+        departmentService = DepartmentService
+        listDepartment = departmentService.get_all_departments_doctors(self)
         token = request.COOKIES.get('authToken')
         user = authenticate_service.get_user_from_token(token)
         patient = patientService.get_patient_by_user_id(user.id)
         if user.role_id==3 :
             context = {
-                "nav": "partials/navDoctorLogged.html",
+                "nav": "partials/navLogged.html",
                 "view": "homepage/homeComponent/medicalInfo.html",
                 "file": "medicalInfo",
+                "listDepartmentResponse":listDepartment,
                 "patient":patient,
             }
 
@@ -619,3 +583,82 @@ class MyHealth(APIView):
             return Response({
                 "message": "Cập nhật thành công"
             }, status=status.HTTP_200_OK)
+            
+            
+class DoiNguBacSi(APIView):    
+    permission_classes = [AllowAny]
+    def get(self, request):
+        authenticate_service = AuthenticateService
+        token = request.COOKIES.get('authToken')
+        user = authenticate_service.get_user_from_token(token)
+        departmentService = DepartmentService
+        listDepartment = departmentService.get_all_departments_doctors(self)
+
+        if user.role_id==3 :
+            context = {
+                "nav": "partials/navLogged.html",
+                "view": "homepage/homeComponent/DoiNguBacSi.html",
+                "file": "DoiNguBacSi",
+                "listDepartmentResponse":listDepartment,
+            }
+
+            return render(request, "homepage/index.html", context)
+
+class Comment(APIView):    
+    permission_classes = [AllowAny]
+    def post(self, request, id):
+        authenticate_service = AuthenticateService
+        token = request.COOKIES.get('authToken')
+        user = authenticate_service.get_user_from_token(token)
+        if user.role_id==3 :
+            content = request.data.get('content')
+            likeService= CommentService()
+            likeService.create_comment(id, user.id, content)
+            return Response('comment successfully')
+        
+class Like(APIView):    
+    permission_classes = [AllowAny]
+    def post(self, request, id):
+        authenticate_service = AuthenticateService
+        token = request.COOKIES.get('authToken')
+        user = authenticate_service.get_user_from_token(token)
+        if user.role_id==3 :
+            likeService= LikeService()
+            likeService.create_like(id, user.id)
+            return Response('like successfully')
+    def delete(self, request, id):
+        authenticate_service = AuthenticateService
+        token = request.COOKIES.get('authToken')
+        user = authenticate_service.get_user_from_token(token)
+        if user.role_id==3 :
+            likeService= LikeService()
+            likeService.delete_like(id, user.id)
+            return Response('unlike successfully')
+        
+class gudmec(APIView):   
+    permission_classes = [AllowAny]      
+    def get (self,request):
+            departmentService = DepartmentService
+            listDepartment = departmentService.get_all_departments_doctors(self)   
+            context = {
+                "nav": "partials/navLogged.html",
+                "view": "homepage/homeComponent/gioithieu.html",
+                "file": "gioithieu",
+                "listDepartmentResponse":listDepartment,
+            }
+
+            return render(request, "homepage/index.html", context)
+        
+class chuyenkhoa(APIView):   
+    permission_classes = [AllowAny]      
+    def get (self,request):
+            departmentService = DepartmentService
+            listDepartment = departmentService.get_all_departments_doctors(self)   
+            context = {
+                "nav": "partials/navLogged.html",
+                "view": "homepage/homeComponent/chuyenkhoa.html",
+                "file": "chuyenkhoa",
+                "listDepartmentResponse":listDepartment,
+            }
+
+            return render(request, "homepage/index.html", context)

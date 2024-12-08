@@ -375,3 +375,8 @@ button {
     background-color: #5cb85c;
     color: white;
 }
+
+.cout-available {
+    font-size: 13px;
+    font-weight: 600;
+}

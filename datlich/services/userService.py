@@ -17,8 +17,9 @@ class UserService:
             'birthday': user.birthday,
             'gender': user.gender,
             'password': user.password,
+            "image": user.image,
         }
-    def update_user(user_id, phone,fullname,gender,birthday):
+    def update_user(user_id, phone,fullname,gender,birthday, avatar):
         try:
             # Lấy người dùng từ cơ sở dữ liệu
             user = UserModel.objects.get(id=user_id)
@@ -26,6 +27,7 @@ class UserService:
             user.telephone = phone
             user.gender = gender
             user.birthday = birthday
+            user.image = avatar
 
             # Lưu các thay đổi vào cơ sở dữ liệu
             user.save()
