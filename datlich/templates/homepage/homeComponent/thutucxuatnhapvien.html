@@ -1,0 +1,222 @@
+{% load static %}
+<style>
+    /* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* Container Styling */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Header Styling */
+.div_head {
+    font-size: 28px;
+    color: #102e9e;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.div_head::after {
+    content: "";
+    display: block;
+    width: 50px;
+    height: 3px;
+    background: #ff6b6b;
+    margin: 10px auto 0;
+}
+
+/* Text Styles */
+p {
+    font-size: 16px;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    text-align: justify;
+}
+
+a {
+    color: #ff6b6b;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* List Styling */
+ul {
+    margin: 15px 0;
+    padding-left: 20px;
+}
+
+ul li {
+    font-size: 16px;
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 20px;
+}
+
+ul li::before {
+    content: "•";
+    color: #ff6b6b;
+    position: absolute;
+    left: 0;
+    font-size: 18px;
+    line-height: 1.2;
+}
+
+/* Highlighted Text */
+h2, h3 {
+    color: #102e9e;
+    font-weight: 700;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+h2 span, h3 span {
+    color: #ff6b6b;
+}
+
+strong {
+    color: #102e9e;
+}
+
+/* Notes and Highlights */
+em {
+    font-style: italic;
+    color: #555;
+}
+
+p em {
+    background: #f4f4f4;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+/* Table Styling (if needed) */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+table th {
+    background-color: #102e9e;
+    color: #fff;
+    font-weight: 600;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Image Styling */
+.img_style {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    margin-top: 20px;
+    border-radius: 8px;
+}
+
+/* Buttons (optional) */
+button {
+    display: inline-block;
+    background-color: #102e9e;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #ff6b6b;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    .div_head {
+        font-size: 24px;
+    }
+
+    p, ul li {
+        font-size: 14px;
+    }
+}
+</style>
+<div class="content" th:fragment="thutucxuatnhapvien">
+  <div class="main-content">
+    <div class="container">
+      <div class="row">
+        <div class="page_detail">
+          <div class="col-xs-12">
+            <div class="text-center">
+              <h1 class="div_head">Thủ tục nhập viện và xuất viện</h1>
+            </div>
+            <div class="content">
+              <p style="text-align: justify;">
+                Với việc trang bị hệ thống thiết bị y tế cao cấp nhập khẩu đồng bộ từ các nước tiên tiến hàng đầu trên thế giới và
+                <a href="https://tamanhhospital.vn/danh-muc-chuyen-gia/chuyen-gia/" target="_blank" rel="noopener noreferrer">
+                  đội ngũ chuyên gia, Giáo sư, Tiến sĩ, Bác sĩ hàng đầu
+                </a>, Phòng Khám Đa Khoa GudMec mang đến dịch vụ chăm sóc sức khỏe cao cấp, toàn diện và hiệu quả nhất.
+                Dưới đây là <strong>thủ tục nhập viện và xuất viện</strong> tại Phòng Khám Đa Khoa GudMec.
+              </p>
+              <h2 style="text-align: justify;"><span style="color: #102e9e;"><strong>Thủ tục nhập viện</strong></span></h2>
+              <p style="text-align: justify;">
+                Khi có chỉ định nhập viện điều trị tại
+                <a href="https://tamanhhospital.vn/" target="_blank" rel="noopener noreferrer">Phòng Khám Đa Khoa GudMec</a>,
+                Quý khách hàng cần chuẩn bị:
+              </p>
+              <ul>
+                <li style="text-align: justify;">Sổ khám bệnh hoặc giấy chỉ định nhập viện của bác sĩ (nếu có).</li>
+                <li style="text-align: justify;">Giấy CMND, Thẻ BHYT (nếu có).</li>
+                <li style="text-align: justify;">Kết quả X-Quang, siêu âm và/hoặc các xét nghiệm/chẩn đoán có liên quan.</li>
+                <li style="text-align: justify;">Phí tạm ứng nhập viện (theo thông báo của nhân viên phụ trách nhập viện).</li>
+                <li style="text-align: justify;">Hạn chế mang theo các tài sản cá nhân có giá trị cao, nếu có, xin vui lòng liên hệ nhân viên để được hướng dẫn bảo quản tại két sắt an toàn.</li>
+              </ul>
+              <p style="text-align: justify;">
+                Trước khi nhập viện, Quý khách và người nhà sẽ được nhân viên phụ trách hướng dẫn cụ thể các thủ tục và giải thích rõ ràng về quy định, chi phí cũng như các vấn đề liên quan.
+              </p>
+              <h2 style="text-align: justify;"><span style="color: #102e9e;"><strong>Thủ tục xuất viện</strong></span></h2>
+              <p style="text-align: justify;">Thủ tục xuất viện sẽ được thực hiện vào buổi sáng hàng ngày.</p>
+              <ul>
+                <li style="text-align: justify;">Quý khách sẽ nhận được các giấy tờ y tế khi xuất viện, bao gồm: Báo cáo y tế ra viện, kết quả xét nghiệm, kết quả chẩn đoán hình ảnh, bảng kê chi phí và biên lai thanh toán, giấy ra viện, giấy chứng sinh (trường hợp sinh con), toa thuốc (nếu có).</li>
+                <li style="text-align: justify;">Đối với trường hợp sinh tại Phòng Khám Đa Khoa GudMec: Quý Khách sẽ được nhân viên hành chính khoa Sản hướng dẫn điền các thông tin cần thiết trên giấy chứng sinh.</li>
+                <li style="text-align: justify;">Trong trường hợp viện phí của Quý khách đã được công ty bảo hiểm xác nhận, Quý khách vẫn cần đến quầy thu ngân để ký xác nhận hóa đơn thanh toán và hoàn tất thủ tục xuất viện.</li>
+              </ul>
+              <p style="text-align: justify;">
+                <strong>Mọi thắc mắc về thủ tục nhập viện và xuất viện, Quý khách vui lòng liên hệ Bộ phận Điều dưỡng hoặc Chăm sóc khách hàng của bệnh viện để được hướng dẫn chi tiết.</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <img class="img_style" alt="" src="{% static 'images/image-1@2x.png' %}" />
+  </div>
+</div>

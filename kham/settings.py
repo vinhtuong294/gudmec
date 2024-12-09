@@ -32,6 +32,12 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 # Application definition
 
 INSTALLED_APPS = [
+    # 'jazzmin',
+    'django_light',
+    'admin_tools_stats',
+    'django_nvd3',
+    'adminlte3',             # Thêm AdminLTE3
+    'adminlte3_theme',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,6 +50,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'apscheduler',
+
 ]
 
 MIDDLEWARE = [
@@ -209,3 +216,11 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8007",
     "http://127.0.0.1:8007",
 ]
+# Cấu hình
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'tuong7749@gmail.com' 
+EMAIL_HOST_PASSWORD = 'aodk tiry emrv rtds'
+

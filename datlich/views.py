@@ -28,6 +28,13 @@ from .services.rateService  import RateService
 from .services.likeService  import LikeService
 from .services.commentService  import CommentService
 import json
+from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
+from django.views.decorators.csrf import csrf_exempt
+import secrets
+import string
+
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
@@ -44,6 +51,66 @@ class UserViewSet(viewsets.ModelViewSet):
         return super().create(request, *args, **kwargs)
     # permission_classes = [IsAuthenticated]
 
+
+def generate_random_password(length=12):
+    """Generate a random password."""
+    characters = string.ascii_letters + string.digits + string.punctuation
+    return ''.join(secrets.choice(characters) for _ in range(length))
+
+@csrf_exempt
+def reset_password(request):
+    if request.method == "POST":
+        try:
+            # Parse JSON từ body của request
+            data = json.loads(request.body)
+            email = data.get('email')
+            print(email)
+            
+            if not email:
+                print("Debug: Email field is missing from the request body.")  # Debug
+                return JsonResponse({"error": "Email field is required."}, status=400)
+
+            print('Debug: Received email:', email)  # Debug
+
+            # Tìm người dùng có email
+            user = get_object_or_404(UserModel, email=email)
+            print('Debug: Found user:', user.email, "| Current password (hashed):", user.password)  # Debug
+
+            # Tạo mật khẩu mới
+            new_password = generate_random_password(12)
+            print('Debug: New password to set:', new_password)  # Debug
+            
+
+            # Đặt lại mật khẩu
+            user.set_password(new_password)
+            user.save()
+            print('Debug: Password updated successfully for user:', user.email)  # Debug
+
+            # Gửi email thông báo
+            send_mail(
+                subject="Your Password Has Been Reset",
+                message=f"Your new password is: {new_password}",
+                from_email="chauchihieu2003@gmail.com",
+                recipient_list=[email],
+            )
+            print('Debug: Email sent successfully to:', email)  # Debug
+
+            return JsonResponse({"message": "New password sent to your email."}, status=200)
+
+        except json.JSONDecodeError:
+            print("Debug: Invalid JSON in request body.")  # Debug
+            return JsonResponse({"error": "Invalid JSON."}, status=400)
+
+        except UserModel.DoesNotExist:
+            print("Debug: No user found with email:", email)  # Debug
+            return JsonResponse({"error": "User with this email does not exist."}, status=404)
+
+        except Exception as e:
+            print("Debug: Unexpected error occurred:", str(e))  # Debug
+            return JsonResponse({"error": "An unexpected error occurred."}, status=500)
+
+    print("Debug: Invalid request method used.")  # Debug
+    return JsonResponse({"error": "Invalid request method."}, status=405)
 
 def password_reset(request):
     return render(request, 'password_reset/password_reset.html')
@@ -495,14 +562,17 @@ class MyMedicalRecord(APIView):
         medicalRecordService= MedicalRecordService()
         patientService = PatientService()
         token = request.COOKIES.get('authToken')
+        departmentService = DepartmentService
+        listDepartment = departmentService.get_all_departments_doctors(self)
         user = authenticate_service.get_user_from_token(token)
         patient = patientService.get_patient_by_user_id(user.id)
         records = medicalRecordService.get_record_patient(patient["id"])
         if user.role_id==3 :
             context = {
-                "nav": "partials/navDoctorLogged.html",
+                "nav": "partials/navLogged.html",
                 "view": "homepage/homeComponent/medicalrecord.html",
                 "file": "medicalrecord",
+                "listDepartmentResponse":listDepartment,
                 "medical_records": records,
                 "patient":patient,
                 "role":user.role_id,
@@ -658,6 +728,163 @@ class chuyenkhoa(APIView):
                 "nav": "partials/navLogged.html",
                 "view": "homepage/homeComponent/chuyenkhoa.html",
                 "file": "chuyenkhoa",
+                "listDepartmentResponse":listDepartment,
+            }
+
+            return render(request, "homepage/index.html", context)
+
+
+class dichvu(APIView):   
+    permission_classes = [AllowAny]      
+    def get (self,request):
+            departmentService = DepartmentService
+            listDepartment = departmentService.get_all_departments_doctors(self)   
+            context = {
+                "nav": "partials/navLogged.html",
+                "view": "homepage/homeComponent/dichvu.html",
+                "file": "dichvu",
+                "listDepartmentResponse":listDepartment,
+            }
+
+            return render(request, "homepage/index.html", context)
+        
+class thanhtuu(APIView):   
+    permission_classes = [AllowAny]      
+    def get (self,request):
+            departmentService = DepartmentService
+            listDepartment = departmentService.get_all_departments_doctors(self)   
+            context = {
+                "nav": "partials/navLogged.html",
+                "view": "homepage/homeComponent/thanhtuu.html",
+                "file": "thanhtuu",
+                "listDepartmentResponse":listDepartment,
+            }
+
+            return render(request, "homepage/index.html", context)
+        
+class thongtinchokhach(APIView):   
+    permission_classes = [AllowAny]      
+    def get (self,request):
+            departmentService = DepartmentService
+            listDepartment = departmentService.get_all_departments_doctors(self)   
+            context = {
+                "nav": "partials/navLogged.html",
+                "view": "homepage/homeComponent/thongtinchokhach.html",
+                "file": "thongtinchokhach",
+                "listDepartmentResponse":listDepartment,
+            }
+
+            return render(request, "homepage/index.html", context)
+        
+        
+class thutucxuatnhapvien(APIView):   
+    permission_classes = [AllowAny]      
+    def get (self,request):
+            departmentService = DepartmentService
+            listDepartment = departmentService.get_all_departments_doctors(self)   
+            context = {
+                "nav": "partials/navLogged.html",
+                "view": "homepage/homeComponent/thutucxuatnhapvien.html",
+                "file": "thutucxuatnhapvien",
+                "listDepartmentResponse":listDepartment,
+            }
+
+            return render(request, "homepage/index.html", context)
+        
+class mucdohailong(APIView):   
+    permission_classes = [AllowAny]      
+    def get (self,request):
+            departmentService = DepartmentService
+            listDepartment = departmentService.get_all_departments_doctors(self)   
+            context = {
+                "nav": "partials/navLogged.html",
+                "view": "homepage/homeComponent/mucdohailong.html",
+                "file": "mucdohailong",
+                "listDepartmentResponse":listDepartment,
+            }
+
+            return render(request, "homepage/index.html", context)
+        
+        
+class huongdantracuu(APIView):   
+    permission_classes = [AllowAny]      
+    def get (self,request):
+            departmentService = DepartmentService
+            listDepartment = departmentService.get_all_departments_doctors(self)   
+            context = {
+                "nav": "partials/navLogged.html",
+                "view": "homepage/homeComponent/huongdantracuu.html",
+                "file": "huongdantracuu",
+                "listDepartmentResponse":listDepartment,
+            }
+
+            return render(request, "homepage/index.html", context)
+        
+class dieutringoaitru(APIView):   
+    permission_classes = [AllowAny]      
+    def get (self,request):
+            departmentService = DepartmentService
+            listDepartment = departmentService.get_all_departments_doctors(self)   
+            context = {
+                "nav": "partials/navLogged.html",
+                "view": "homepage/homeComponent/dieutringoaitru.html",
+                "file": "dieutringoaitru",
+                "listDepartmentResponse":listDepartment,
+            }
+
+            return render(request, "homepage/index.html", context)
+        
+class thanhtoanbaohiem(APIView):   
+    permission_classes = [AllowAny]      
+    def get (self,request):
+            departmentService = DepartmentService
+            listDepartment = departmentService.get_all_departments_doctors(self)   
+            context = {
+                "nav": "partials/navLogged.html",
+                "view": "homepage/homeComponent/thanhtoanbaohiem.html",
+                "file": "thanhtoanbaohiem",
+                "listDepartmentResponse":listDepartment,
+            }
+
+            return render(request, "homepage/index.html", context)
+        
+class banggia(APIView):   
+    permission_classes = [AllowAny]      
+    def get (self,request):
+            departmentService = DepartmentService
+            listDepartment = departmentService.get_all_departments_doctors(self)   
+            context = {
+                "nav": "partials/navLogged.html",
+                "view": "homepage/homeComponent/banggia.html",
+                "file": "banggia",
+                "listDepartmentResponse":listDepartment,
+            }
+
+            return render(request, "homepage/index.html", context)
+        
+class noitru(APIView):   
+    permission_classes = [AllowAny]      
+    def get (self,request):
+            departmentService = DepartmentService
+            listDepartment = departmentService.get_all_departments_doctors(self)   
+            context = {
+                "nav": "partials/navLogged.html",
+                "view": "homepage/homeComponent/noitru.html",
+                "file": "noitru",
+                "listDepartmentResponse":listDepartment,
+            }
+
+            return render(request, "homepage/index.html", context)
+        
+class huongdankham(APIView):   
+    permission_classes = [AllowAny]      
+    def get (self,request):
+            departmentService = DepartmentService
+            listDepartment = departmentService.get_all_departments_doctors(self)   
+            context = {
+                "nav": "partials/navLogged.html",
+                "view": "homepage/homeComponent/huongdankham.html",
+                "file": "huongdankham",
                 "listDepartmentResponse":listDepartment,
             }
 

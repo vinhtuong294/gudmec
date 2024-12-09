@@ -134,6 +134,7 @@ class Schedule(models.Model): #Lịch hẹn khám
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='schedules',blank=None, null=True)
     shift = models.ForeignKey(Shift, on_delete=models.CASCADE, related_name='schedules',blank=None, null=True)
     is_ready = models.BooleanField(default=True)
+    notified = models.BooleanField(default=False)
     
 
 class MedicalRecord(models.Model): #Bệnh án

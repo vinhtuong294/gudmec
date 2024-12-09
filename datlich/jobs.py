@@ -1,6 +1,7 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import date, datetime,timedelta
 from datlich.models import Doctor, Shift, Schedule
+from django.core.mail import send_mail
 
 # Chức năng 1: Tạo lịch khám hàng ngày
 def generate_daily_schedules():
@@ -21,6 +22,37 @@ def generate_daily_schedules():
                 }
             )
     print("Schedules created for date:", today)
+    
+def notify_schedules():
+    today = datetime.now().date()
+
+    # Lấy danh sách lịch hẹn cần thông báo
+    schedules = Schedule.objects.select_related(
+        'patient', 'patient__user', 'doctor', 'doctor__user', 'shift'
+    ).filter(
+        date=today,
+        is_ready=False,  # Chưa sẵn sàng
+        shift__time_start__gt=(datetime.now() - timedelta(hours=3)).time(),  # Sớm hơn 3 giờ
+        notified=False,
+    ).exclude(
+        patient__isnull=True  # Bệnh nhân không được null
+    )
+
+    # Gửi email cho từng lịch hẹn
+    for schedule in schedules:
+        user_email = schedule.patient.user.email
+        doctor_name = schedule.doctor.user.fullname
+        schedule_date = schedule.date.strftime('%d-%m-%Y')
+        schedule_time = schedule.shift.time_start.strftime('%H:%M')
+        send_mail(
+            subject="Bạn có lịch đặt khám hôm nay!",
+            message=f"Bạn có cuộc hẹn với Bác sĩ {doctor_name} vào ngày {schedule_date} lúc {schedule_time}.",
+            from_email="tuong7749@gmail.com",
+            recipient_list=[user_email],
+        )
+        schedule.notified = True
+        schedule.save()
+    print("Notify schedules executed successfully.")
 
 # Chức năng 2: Cập nhật is_ready cho các schedule quá hạn
 def update_schedule_ready_status():
@@ -64,7 +96,9 @@ def start_scheduler():
     # Lịch trình chạy: Cập nhật trạng thái schedule mỗi 1 phút
     scheduler.add_job(update_schedule_ready_status, 'interval', minutes=5)
     
-    scheduler.add_job(auto_delete_schedule, 'interval', minutes=1)
+    scheduler.add_job(notify_schedules, 'interval', minutes=1)
+    
+    scheduler.add_job(auto_delete_schedule, 'cron', hour=0, minute=0)
     
     scheduler.start()
     print("Scheduler started: Tasks are running.")

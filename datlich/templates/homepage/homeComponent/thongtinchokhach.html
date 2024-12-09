@@ -1,0 +1,242 @@
+{% load static %}
+<style>
+  /* Reset styles for better cross-browser rendering */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+/* Container styling */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading styles */
+h1 {
+    color: #102ea6;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+h2 {
+    font-size: 24px;
+    color: #102ea6;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+h3 {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+/* Text and links */
+p {
+    text-align: justify;
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Lists */
+ul {
+    margin-left: 20px;
+    margin-bottom: 15px;
+    list-style-type: disc;
+}
+
+ul ul {
+    list-style-type: circle;
+}
+
+li {
+    margin-bottom: 5px;
+}
+
+/* Highlighted sections */
+strong {
+    font-weight: bold;
+}
+
+span[style*="color: #ff0000"] {
+    color: #ff0000;
+    font-weight: bold;
+}
+
+/* Images */
+.img_style {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 20px auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Page layout */
+.page_detail {
+    margin: 20px 0;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.div_over {
+    padding: 20px;
+    overflow: hidden;
+}
+
+/* Buttons (optional if needed for interactions) */
+button {
+    background: #102ea6;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0d1e86;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    h3 {
+        font-size: 16px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+}
+
+</style>
+<div class="content" th:fragment="thongtinkhachthambenh">
+    <div class="main-content div_over">
+        <div class="container">
+            <div class="row">
+                <div class="page_detail">
+                    <div class="col-xs-12">
+                        <div class="text-center">
+                            <h1 class="div_head text-center cl_head text-uppercase font_hel sz_24 mb_35 pb_15">
+                                Thông tin cho khách thăm bệnh 
+                            </h1>
+                        </div>
+                        <div class="content">
+                            <p style="text-align: justify;">
+                                <span style="font-weight: 400;">
+                                    Quý khách vui lòng đọc kỹ <strong>Hướng dẫn khách thăm bệnh</strong> để sắp xếp thời gian cũng như đảm bảo thời gian nghỉ ngơi của người bệnh đang khám và chữa bệnh tại&nbsp;
+                                    <strong>
+                                        <a href="https://tamanhhospital.vn/">Hệ thống Phòng Khám Đa Khoa GudMec</a>
+                                    </strong>.
+                                </span>
+                            </p>
+                            <h2 style="text-align: justify;">
+                                <span style="font-size: 20px; color: #102ea6;">Phòng Khám Đa Khoa GudMec</span>
+                            </h2>
+                            <h3 style="text-align: justify;">
+                                <span style="font-size: 16px;">Giờ thăm người bệnh</span>
+                            </h3>
+                            <ul>
+                                <li>
+                                    <strong>Từ thứ 2 – Thứ 7</strong>
+                                    <ul>
+                                        <li style="font-weight: 400;" aria-level="1">
+                                            <span style="font-weight: 400;">Sáng: từ 6h00 – 7h00</span>
+                                        </li>
+                                        <li style="font-weight: 400;" aria-level="1">
+                                            <span style="font-weight: 400;">Chiều: từ 15h00 – 21h00</span>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Chủ Nhật và các ngày Lễ Tết:</strong>
+                                    <span style="font-weight: 400;">từ 6h00 – 21h00</span>
+                                </li>
+                            </ul>
+                            <p>
+                                <span style="font-weight: 400;">
+                                    Ngoài thời gian nói trên, thân nhân vào thăm người bệnh cần có sự đồng ý của điều dưỡng trưởng khoa hoặc điều dưỡng trưởng ca trực.
+                                </span>
+                            </p>
+                            <h2 style="text-align: justify;">
+                                <span style="font-size: 20px; color: #102ea6;">Phòng Khám Đa Khoa GudMec</span>
+                            </h2>
+                            <h3 style="text-align: justify;">
+                                <span style="font-size: 16px;">Giờ thăm người bệnh điều trị tại Khoa ICU, NICU</span>
+                            </h3>
+                            <p>
+                                <span style="font-weight: 400;">
+                                    Khung giờ thăm bệnh từ thứ Hai đến Chủ Nhật, bao gồm các ngày Lễ, Tết:
+                                </span>
+                            </p>
+                            <ul>
+                                <li style="font-weight: 400;" aria-level="1">
+                                    <span style="font-weight: 400;">Sáng từ 11:00 – 12:00</span>
+                                </li>
+                                <li style="font-weight: 400;" aria-level="1">
+                                    <span style="font-weight: 400;">Chiều từ 15:00 – 20:00</span>
+                                </li>
+                            </ul>
+                            <p style="text-align: justify;">
+                                <span style="text-decoration: underline; color: #ff0000;">
+                                    <strong>Lưu ý:</strong>
+                                </span>
+                            </p>
+                            <ul style="text-align: justify;">
+                                <li style="font-weight: 400;" aria-level="1">
+                                    <span style="font-weight: 400;">
+                                        Thời gian thăm bệnh tại khoa ICU và NICU tối đa 10 phút/ lượt.
+                                    </span>
+                                </li>
+                                <li style="font-weight: 400;" aria-level="1">
+                                    <span style="font-weight: 400;">
+                                        Số lượng người thăm: 01 người/ lượt và tối đa 2 lượt thăm/ khung giờ
+                                    </span>
+                                </li>
+                            </ul>
+                            <!-- Tiếp tục thêm các nội dung tương tự ở đây -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                </div>
+            </div>
+        </div>
+    </div>
+    <img class="img_style" alt="" src="{% static 'images/image-1@2x.png' %}" />
+</div>

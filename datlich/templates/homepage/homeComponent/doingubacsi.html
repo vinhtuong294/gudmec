@@ -97,6 +97,11 @@
         color: #007bff;
         margin-bottom: 10px;
     }
+    .doctor-avatar{
+        weight:100px !important;
+        height:100px !important;
+        border-radius: 50%;
+    }
 
     .doctor-specialty {
         font-size: 14px;
@@ -149,6 +154,7 @@
                             <div class="doctor-card mb-4">
                                 <div class="card-body">
                                     <h5 class="doctor-name">{{ doctor.user.fullname }}</h5>
+                                    <img class="doctor-avatar" src="{{doctor.avatar}}" alt=""/>
                                     <p class="doctor-specialty">Chức vụ: {{ doctor.position }}</p>
                                     <div class="doctor-cta mt-3">
                                         <a class="btn btn-primary" href="/appointment/{{ doctor.id }}">

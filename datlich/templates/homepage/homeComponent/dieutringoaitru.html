@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quy trình khám và điều trị ngoại trú - Bệnh viện Gudmec</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #f8f9fa;
+            --text-color: #343a40;
+            --muted-color: #6c757d;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--secondary-color);
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+        }
+
+        .header {
+            background-color: var(--primary-color);
+            color: #fff;
+            text-align: center;
+            padding: 20px 10px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .process-container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .process-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .process-step img {
+            max-width: 80px;
+            border-radius: 5px;
+        }
+
+        .process-step .step-details {
+            flex: 1;
+        }
+
+        .process-step .step-details h3 {
+            color: var(--primary-color);
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .process-step .step-details p {
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .contact-info {
+            background-color: var(--primary-color);
+            color: #fff;
+            text-align: center;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .contact-info p {
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .process-step {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .process-step img {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <h1>Quy Trình Khám Và Điều Trị Ngoại Trú</h1>
+    </header>
+
+    <section class="process-container">
+        <div class="process-step">
+            <img src="https://cdn.luatvietnam.vn/uploaded/Images/Original/2020/12/30/Kham_benh_cho_benh_nhi(1)_3012094527.jpeg" alt="Bước 1">
+            <div class="step-details">
+                <h3>Bước 1: Đăng ký khám</h3>
+                <p>Đăng ký tại quầy lễ tân hoặc trực tuyến trên website của bệnh viện. Cung cấp thông tin cá nhân và lựa
+                    chọn loại dịch vụ khám.</p>
+            </div>
+        </div>
+
+        <div class="process-step">
+            <img src="https://th.bing.com/th/id/OIP.lh6rBUkT1MKhT7XiIJhozQHaFj?rs=1&pid=ImgDetMain" alt= "Bước 2">
+            <div class="step-details">
+                <h3>Bước 2: Tiếp nhận và phân loại</h3>
+                <p>Nhận số thứ tự và được hướng dẫn đến khu vực khám chuyên khoa phù hợp với tình trạng sức khỏe.</p>
+            </div>
+        </div>
+
+        <div class="process-step">
+            <img src="https://th.bing.com/th/id/OIP.S4wG2SdAyO_s1AVfdtv5CAHaFj?rs=1&pid=ImgDetMain" alt="Bước 3">
+            <div class="step-details">
+                <h3>Bước 3: Khám và chẩn đoán</h3>
+                <p>Bác sĩ thăm khám và yêu cầu thực hiện các xét nghiệm, chẩn đoán hình ảnh nếu cần thiết để xác định
+                    bệnh.</p>
+            </div>
+        </div>
+
+        <div class="process-step">
+            <img src="https://th.bing.com/th/id/OIP.gAH-iY9wPfhY-1ReqFxUlgHaD3?rs=1&pid=ImgDetMain" alt="Bước 4">
+            <div class="step-details">
+                <h3>Bước 4: Thực hiện xét nghiệm</h3>
+                <p>Di chuyển đến phòng xét nghiệm hoặc khu vực chẩn đoán hình ảnh theo hướng dẫn của nhân viên y tế.</p>
+            </div>
+        </div>
+
+        <div class="process-step">
+            <img src="https://th.bing.com/th/id/OIP.0hTz40XhUtS-YjcEpGV46QHaE7?rs=1&pid=ImgDetMain" alt="Bước 5">
+            <div class="step-details">
+                <h3>Bước 5: Nhận kết quả và tư vấn</h3>
+                <p>Quay lại gặp bác sĩ để nhận kết quả và được tư vấn phương pháp điều trị phù hợp.</p>
+            </div>
+        </div>
+
+        <div class="process-step">
+            <img src="https://th.bing.com/th/id/OIP.pehhwTPuel1o1FyCbsrsJQHaEK?rs=1&pid=ImgDetMain" alt="Bước 6">
+            <div class="step-details">
+                <h3>Bước 6: Thanh toán và nhận thuốc</h3>
+                <p>Thanh toán tại quầy và nhận thuốc (nếu có) tại nhà thuốc bệnh viện. Kết thúc quy trình.</p>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>

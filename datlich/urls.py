@@ -32,6 +32,19 @@ urlpatterns = [
     path('like/<int:id>/', Like.as_view(), name='like'),
     path('gudmec/', gudmec.as_view(), name='gudmec'),
     path('chuyenkhoa/', chuyenkhoa.as_view(), name='chuyenkhoa'),
+    path('reset-password/', reset_password, name='reset_password'),
+    path('dichvu/',dichvu.as_view(),name="dichvu"),
+    path('homepage/thanhtuu/',thanhtuu.as_view(),name="thanhtuu"),
+    path('thongtinchokhach/',thongtinchokhach.as_view(),name="thongtinchokhach"),
+    path('thutucxuatnhapvien',thutucxuatnhapvien.as_view(),name="thutucxuatnhapvien"),
+    path('mucdohailong/',mucdohailong.as_view(),name="mucdohailong"),
+    path('huongdantracuu',huongdantracuu.as_view(),name="huongdantracuu"),
+    path('dieutringoaitru/',dieutringoaitru.as_view(),name="dieutringoaitru"),
+    path('thanhtoanbaohiem/',thanhtoanbaohiem.as_view(),name="thanhtoanbaohiem"),
+    path('banggia/',banggia.as_view(),name="banggia"),
+    path('noitru/',noitru.as_view(),name="noitru"),
+    path('huongdankham/',huongdankham.as_view(),name="huongdankham"),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
