@@ -89,7 +89,7 @@ def reset_password(request):
             # Gửi email thông báo
             send_mail(
                 subject="Your Password Has Been Reset",
-                message=f"Your new password is: {new_password}",
+                message=f"Your new password is: {new_password} Bạn có thể vào phần thông tin cá nhân trong hồ sơ để đặt lại mật khẩu",
                 from_email="chauchihieu2003@gmail.com",
                 recipient_list=[email],
             )
@@ -889,3 +889,61 @@ class huongdankham(APIView):
             }
 
             return render(request, "homepage/index.html", context)
+        
+class Edit_doctor(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        if request.method == "GET":
+            authenticate_service = AuthenticateService
+            department_service = DepartmentService
+            userService = UserService()
+            token = request.COOKIES.get('authToken')
+            user = authenticate_service.get_user_from_token(token)
+            userInfo = userService.get_one_user(user.id)
+            print(userInfo)
+            if user.role_id==2 :
+                context = {
+                    "nav": "partials/navDoctorLogged.html",
+                    "navState": "navLogged",
+                    "view": "homepage/homeComponent/editdoctor.html",
+                    "file": "editdoctor",
+                    "listDepartmentResponse": department_service.get_all_departments(self),
+                    "user": userInfo,
+                }
+
+                return render(request, "homepage/index.html", context)
+    def post(self, request):
+        authenticate_service = AuthenticateService
+        userService = UserService
+        token = request.COOKIES.get('authToken')
+        user = authenticate_service.get_user_from_token(token)
+        if user.role_id==2 :
+            phone = request.POST.get('phone')
+            fullname = request.POST.get('fullname')
+            gender = request.POST.get('gender')
+            birthday = request.POST.get('birthday')
+            avatar = request.FILES.get('avatar')
+            updated_user = userService.update_user(user.id,phone,fullname,gender,birthday,avatar)
+            return Response({
+                "message": "User updated successfully.",
+                "user": {
+                    "id": updated_user.id,
+                    "fullname": updated_user.fullname,
+                    "telephone": updated_user.telephone,
+                    "gender": updated_user.gender,
+                    "birthday": updated_user.birthday
+                }
+            }, status=status.HTTP_200_OK)
+    def put(self, request):
+        authenticate_service = AuthenticateService
+        userService = UserService()
+        token = request.COOKIES.get('authToken')
+        user = authenticate_service.get_user_from_token(token)
+        if user.role_id==2 :
+            old_password = request.data.get('inputPassword')
+            new_password = request.data.get('newPassword')
+            userService.change_password(user.id,old_password,new_password)
+            return Response({
+                "message": "change password successfully."
+            }, status=status.HTTP_200_OK)

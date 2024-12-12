@@ -25,7 +25,13 @@
                 <a class="link team-of-doctors">LIÊN HỆ</a>
                 <a class="link url-get-medical" href="{% url 'appointmentDoctor' %}">LỊCH ĐẶT KHÁM</a>
                 <li class="link dropdown" style="width: 158px;">
-                    <a class="dropdown-toggle btn-logout" href="#" role="button" data-bs-toggle="dropdown">ĐĂNG XUẤT</a>
+                    <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">HỒ SƠ</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'editdoctor' %}">Thông tin cá nhân</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><div class="dropdown-item btn-logout" href="">Đăng xuất</div></li>
                     {% comment %} <ul class="dropdown-menu">
                         <li><a class="dropdown-item btn-logout" href=""></a></li>
                     </ul> {% endcomment %}

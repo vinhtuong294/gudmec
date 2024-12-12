@@ -196,11 +196,10 @@ color:black;
       <a href="/edit/" class="sidebar-item" data-id="profile" onclick="navigate(this, '/edit')">Hồ sơ của tôi</a>
       <a class="sidebar-item" data-id="health" onclick="navigate(this, '/new-content')">Sức khỏe của tôi</a>
       <a href="/appointmenthistory/" class="sidebar-item" data-id="history" onclick="setActive(this)">Lịch sử đặt lịch</a>
-      <a class="sidebar-item" data-id="logout" onclick="setActive(this)">Đăng xuất</a>
     </aside>
 
     <main class="main-content">
-      <h3 class="user-title-main">Thông tin tài khoản</h3>
+      <h3 class="user-title-main">Thông tin khách hàng</h3>
       <div class="user-account">
         <form class="user-form" method="POST" id="patient-form">
           <input type="hidden" id="patient-id" value="{{ user.id }}">

@@ -3,5 +3,5 @@
 - Django: 4.2.16
 
 ``` python
-py manage.py runserver
+py manage.py runserver 8007
 ```

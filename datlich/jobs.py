@@ -46,7 +46,7 @@ def notify_schedules():
         schedule_time = schedule.shift.time_start.strftime('%H:%M')
         send_mail(
             subject="Bạn có lịch đặt khám hôm nay!",
-            message=f"Bạn có cuộc hẹn với Bác sĩ {doctor_name} vào ngày {schedule_date} lúc {schedule_time}.",
+            message=f"Bạn có cuộc hẹn với Bác sĩ {doctor_name} vào ngày {schedule_date} lúc {schedule_time}. Mọi thắc mắc vui lòng liên hệ hotline: 0397521031",
             from_email="tuong7749@gmail.com",
             recipient_list=[user_email],
         )

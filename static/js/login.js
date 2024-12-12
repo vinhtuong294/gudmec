@@ -29,23 +29,23 @@ function redirectToHome() {
             "Authorization": `Bearer ${token}`
         }
     })
-    .then(response => {
-        if (response.ok) {
-            // Nếu xác thực thành công, chuyển hướng đến trang `home`
-            window.location.href = "/homepage/";
-        } else {
-            // Nếu xác thực thất bại, chuyển hướng đến trang đăng nhập
-            //window.location.href = "/login";
-        }
-    })
-    .catch(error => {
-        console.error("Có lỗi xảy ra:", error);
-       // window.location.href = "/login";
-    });
+        .then(response => {
+            if (response.ok) {
+                // Nếu xác thực thành công, chuyển hướng đến trang `home`
+                window.location.href = "/homepage/";
+            } else {
+                // Nếu xác thực thất bại, chuyển hướng đến trang đăng nhập
+                //window.location.href = "/login";
+            }
+        })
+        .catch(error => {
+            console.error("Có lỗi xảy ra:", error);
+            // window.location.href = "/login";
+        });
 }
 
 
-function showSlides () {
+function showSlides() {
     var i;
     var slides = document.getElementsByClassName("slide");
     for (i = 0; i < slides.length; i++) {
@@ -80,21 +80,17 @@ document.getElementById("loginForm").addEventListener("submit", function (event)
         .then(response => {
             if (!response.ok) {
                 console.log("Tên tài khoản hoặc mật khẩu không chính xác!");
+                alert("Tên tài khoản hoặc mật khẩu không chính xác!");
                 throw new Error("Failed to authenticate");
             }
             return response.json();
+
+
         })
         .then(data => {
             const decodedToken = jwt_decode(data.access);
             handleLoginSuccess(data.access);
             console.log("Decoded token payload:", decodedToken);
-            // if(decodedToken.role === 1){
-            // window.location.href = "http://localhost:8007/admin";
-            // }else if(decodedToken.role === 2){
-            // window.location.href = "http://localhost:8007/doctor_homepage";
-            // }else{
-            //window.location.href = "http://localhost:8007/homepage/";
-            // }
             console.log("Authentication successful:", data);
             redirectToHome()
 

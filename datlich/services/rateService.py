@@ -12,7 +12,7 @@ class RateService:
         rate = Rate.objects.select_related('user').get(doctor_id=doctor_id, user_id=user_id)
         return rate
 
-    
+ #Tạo và chỉnh sửa đánh giá   
     def create_update_rate(self,user_id, doctor_id,data ):
         rate = Rate.objects.get(doctor_id=doctor_id, user_id=user_id)
         if rate:
