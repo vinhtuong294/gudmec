@@ -91,7 +91,6 @@ class Doctor(models.Model): #Bác sĩ
     service_prices = models.IntegerField()
     department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='list_doctors')
     user = models.OneToOneField(UserModel, on_delete=models.CASCADE, related_name='doctor')
-    avatar = models.TextField(blank=None, null=True)
     average_rate = models.FloatField(default=0)
 
     def update_average_rate(self):

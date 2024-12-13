@@ -673,6 +673,25 @@ class DoiNguBacSi(APIView):
             }
 
             return render(request, "homepage/index.html", context)
+        
+class DoiNguBacSidoctor(APIView):    
+    permission_classes = [AllowAny]
+    def get(self, request):
+        authenticate_service = AuthenticateService
+        token = request.COOKIES.get('authToken')
+        user = authenticate_service.get_user_from_token(token)
+        departmentService = DepartmentService
+        listDepartment = departmentService.get_all_departments_doctors(self)
+
+        if user.role_id==2 :
+            context = {
+                "nav": "partials/navDoctorLogged.html",
+                "view": "homepage/homeComponent/doingubacsiDoctor.html",
+                "file": "doingubacsiDoctor",
+                "listDepartmentResponse":listDepartment,
+            }
+            
+            return render(request, "homepage/index.html", context)
 
 class Comment(APIView):    
     permission_classes = [AllowAny]
@@ -706,32 +725,47 @@ class Like(APIView):
             return Response('unlike successfully')
         
 class gudmec(APIView):   
-    permission_classes = [AllowAny]      
-    def get (self,request):
-            departmentService = DepartmentService
-            listDepartment = departmentService.get_all_departments_doctors(self)   
-            context = {
-                "nav": "partials/navLogged.html",
-                "view": "homepage/homeComponent/gioithieu.html",
-                "file": "gioithieu",
-                "listDepartmentResponse":listDepartment,
-            }
+    permission_classes = [AllowAny]   
+    def get(self, request):
+        authenticate_service = AuthenticateService
+        token = request.COOKIES.get('authToken')
+        user = authenticate_service.get_user_from_token(token)
+        department_service = DepartmentService
+        context = {
+            "view": "homepage/homeComponent/gioithieu.html",
+            "listDepartmentResponse": department_service.get_all_departments(self),
+        }
+        if user.role_id==2 :
+            context["nav"] = {"partials/navDoctorLogged.html"}
+            context["file"]={"gioithieu.html"}
+        if user.role_id==3 :
+            context["nav"] = {"partials/navLogged.html"}
+            context["file"]={"gioithieu.html"}
 
-            return render(request, "homepage/index.html", context)
+        return render(request, "homepage/index.html", context)
+
+        
         
 class chuyenkhoa(APIView):   
     permission_classes = [AllowAny]      
     def get (self,request):
-            departmentService = DepartmentService
-            listDepartment = departmentService.get_all_departments_doctors(self)   
-            context = {
-                "nav": "partials/navLogged.html",
-                "view": "homepage/homeComponent/chuyenkhoa.html",
-                "file": "chuyenkhoa",
-                "listDepartmentResponse":listDepartment,
-            }
+        authenticate_service = AuthenticateService
+        departmentService = DepartmentService
+        token = request.COOKIES.get('authToken')
+        user = authenticate_service.get_user_from_token(token) 
+        department_service = DepartmentService
+        context = {
+            "view": "homepage/homeComponent/gioithieu.html",
+            "listDepartmentResponse": department_service.get_all_departments(self),
+        }
+        if user.role_id==2 :
+            context["nav"] = {"partials/navDoctorLogged.html"}
+            context["file"]={"chuyenkhoa.html"}
+        if user.role_id==3 :
+            context["nav"] = {"partials/navLogged.html"}
+            context["file"]={"chuyenkhoa.html"}
 
-            return render(request, "homepage/index.html", context)
+        return render(request, "homepage/index.html", context)
 
 
 class dichvu(APIView):   

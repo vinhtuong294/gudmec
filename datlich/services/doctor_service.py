@@ -15,6 +15,6 @@ class DoctorService:
             "room_address": doctor.room_address,
             "service_prices": doctor.service_prices,
             "department": doctor.department.name_department,
-            "avatar":doctor.avatar,
+            "avatar":doctor.user.image,
             "average_rating":doctor.average_rate
         }

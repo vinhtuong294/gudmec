@@ -213,7 +213,7 @@
             {% for article in articles %}
                 <div class="article">
                     <div class="article-header">
-                        <img src="{{ article.author.image.url }}" alt="Tác giả">
+                        <img src={{ article.author.image }} alt="Tác giả">
                         <div class="info">
                             <h3>{{ article.author.username }}</h3>
                             <small>Ngày đăng: {{ article.created_at|date:"d/m/Y H:i" }}</small>

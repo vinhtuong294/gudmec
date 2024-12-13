@@ -157,8 +157,8 @@
                                     <img class="doctor-avatar" src="{{doctor.user.image}}" alt=""/>
                                     <p class="doctor-specialty">Chức vụ: {{ doctor.position }}</p>
                                     <div class="doctor-cta mt-3">
-                                        <a class="btn btn-primary" href="/appointment/{{ doctor.id }}">
-                                            Xem chi tiết
+                                        {% comment %} <a class="btn btn-primary" href="/appointment/{{ doctor.id }}">
+                                            Xem chi tiết {% endcomment %}
                                         </a>
                                     </div>
                                 </div>

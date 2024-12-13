@@ -45,6 +45,7 @@ urlpatterns = [
     path('noitru/',noitru.as_view(),name="noitru"),
     path('huongdankham/',huongdankham.as_view(),name="huongdankham"),
     path('editdoctor/', Edit_doctor.as_view(), name='editdoctor'),
+    path('doingubacsiDocotr',DoiNguBacSidoctor.as_view(), name = 'doingubacsiDocotr'),
 
 ]
 if settings.DEBUG:

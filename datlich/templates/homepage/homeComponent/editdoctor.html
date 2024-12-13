@@ -82,6 +82,7 @@
                 <form class="user-form" method="POST" id="form-2"  enctype="multipart/form-data">
                     <input type="hidden" id="user-id" name="user-id" value="{{ user.id }}">
                     <input type="hidden" id="password-id" name="password-id" value="{{ user.password }}">
+                    {% if user.role_id == 3 %}
                     <div class="form-group">
                         <label for="avatar">Avatar</label>
                         <div class="avatar-preview">
@@ -89,6 +90,7 @@
                         </div>
                         <input type="file" id="avatar" name="avatar" class="form-control">
                     </div>                    
+                    {% endif %}
                     <div class="form-group">
                         <label for="username">Tên đăng nhập <span class="text-danger"></span></label>
                         <input id="username" name="username" type="text" placeholder="Tên đăng nhập" class="form-control"

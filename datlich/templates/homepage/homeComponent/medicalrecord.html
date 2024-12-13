@@ -31,6 +31,10 @@
             text-align: center;
         }
 
+        .row {
+            margin-bottom: 20px;
+        }
+
         .table {
             margin: 0;
         }
@@ -71,10 +75,12 @@
                 font-size: 1.5rem;
             }
         }
+
         .disable-1 {
             display: none;
         }
-        .user-3{
+
+        .user-3 {
             display: none;
         }
     </style>
@@ -89,20 +95,31 @@
             {% else %}
             Bệnh Án Của Bệnh Nhân
             {% endif %}
-            </h2>
+        </h2>
 
-        <!-- Thông tin bệnh nhân -->
-        <div class="mb-4">
-            <h5>Thông Tin Bệnh Nhân</h5>
-            <p><strong>Tên:</strong> {{ patient.name }}</p>
-            <p><strong>Năm Sinh:</strong> {{ patient.birthday|date:"d/m/Y" }}</p>
-            <p><strong>Giới Tính:</strong>                             
-                {% if patient.gender %}
-                Nữ 
-                {% else %}
-                Nam
-                {% endif %}
-            </p>
+        <div class="row">
+            <!-- Thông tin bệnh nhân -->
+            <div class="col-md-6">
+                <h5>Thông Tin Bệnh Nhân</h5>
+                <p><strong>Tên:</strong> {{ patient.name }}</p>
+                <p><strong>Năm Sinh:</strong> {{ patient.birthday|date:"d/m/Y" }}</p>
+                <p><strong>Giới Tính:</strong>                             
+                    {% if patient.gender %}
+                    Nữ 
+                    {% else %}
+                    Nam
+                    {% endif %}
+                </p>
+            </div>
+
+            <!-- Hồ Sơ Bệnh Nhân -->
+            <div class="col-md-6">
+                <h5>Hồ Sơ Bệnh Nhân</h5>
+                <p><strong>Chiều cao:</strong> {{ patient.chieucao }}</p>
+                <p><strong>Cân nặng:</strong> {{ patient.cannang }}</p>
+                <p><strong>Nhóm máu:</strong> {{ patient.nhommau }}</p>
+                <p><strong>Bệnh Nền:</strong> {{ patient.benhnen }}</p>
+            </div>
         </div>
 
         <!-- Danh Sách Bệnh Án Cũ -->
@@ -154,7 +171,6 @@
             <button type="submit" class="btn btn-primary">Thêm Bệnh Án</button>
         </form>
     </div>
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
