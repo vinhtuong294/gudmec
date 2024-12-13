@@ -1,0 +1,42 @@
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">STT</th>
+                <th scope="col">Tên Bệnh Nhân</th>
+                <th scope="col">Ngày Khám</th>
+                <th scope="col">Giờ Khám</th>
+                <th scope="col">Trạng Thái</th>
+                <th scope="col">Chi Tiết</th>
+            </tr>
+        </thead>
+            <tbody id="booking-list">
+                {% for booking in bookings %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ booking.patient_name }}</td>
+                    <td>{{ booking.date|date:"d/m/Y" }}</td>
+                    <td>{{ booking.time_start }}</td>
+                    <td>
+                        {% if booking.state == 0 %}
+                            Đang chờ
+                        {% elif booking.state == 1 %}
+                            Đã hoàn thành
+                        {% elif booking.state == 2 %}
+                            Đã bỏ lỡ
+                        {% else %}
+                            Không xác định
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="/medical-record/{{booking.id}}/" class="btn btn-info btn-sm">Xem</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">Không có lịch khám nào.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+    </table>
+</div>

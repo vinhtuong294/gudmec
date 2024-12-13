@@ -433,6 +433,12 @@ class Appointment(APIView):
             date = request.GET.get('date', None)
             shifts = schedule_service.get_doctor_schedules(user.id,date )
             if user.role_id==2 :
+                if date:
+                    print(shifts)
+                    context = {
+                    "bookings": shifts,
+                    }
+                    return render(request, "homepage/homeComponent/appointmentDoctorDate.html", context)
                 context = {
                     "nav": "partials/navDoctorLogged.html",
                     "view": "homepage/homeComponent/appointmentDoctor.html",

@@ -84,47 +84,49 @@
             </form>
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">STT</th>
-                        <th scope="col">Tên Bệnh Nhân</th>
-                        <th scope="col">Ngày Khám</th>
-                        <th scope="col">Giờ Khám</th>
-                        <th scope="col">Trạng Thái</th>
-                        <th scope="col">Chi Tiết</th>
-                    </tr>
-                </thead>
-                <tbody id="booking-list">
-                    {% for booking in bookings %}
-                    <tr>
-                        <th scope="row">{{ forloop.counter }}</th>
-                        <td>{{ booking.patient_name }}</td>
-                        <td>{{ booking.date|date:"d/m/Y" }}</td>
-                        <td>{{ booking.time_start }}</td>
-                        <td>
-                            {% if booking.state == 0 %}
-                                Đang chờ
-                            {% elif booking.state == 1 %}
-                                Đã hoàn thành
-                            {% elif booking.state == 2 %}
-                                Đã bỏ lỡ
-                            {% else %}
-                                Không xác định
-                            {% endif %}
-                        </td>
-                        <td>
-                            <a href="/medical-record/{{booking.id}}/" class="btn btn-info btn-sm">Xem</a>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="6" class="text-center">Không có lịch khám nào.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div id="dynamic-content">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">STT</th>
+                            <th scope="col">Tên Bệnh Nhân</th>
+                            <th scope="col">Ngày Khám</th>
+                            <th scope="col">Giờ Khám</th>
+                            <th scope="col">Trạng Thái</th>
+                            <th scope="col">Chi Tiết</th>
+                        </tr>
+                    </thead>
+                        <tbody id="booking-list">
+                            {% for booking in bookings %}
+                            <tr>
+                                <th scope="row">{{ forloop.counter }}</th>
+                                <td>{{ booking.patient_name }}</td>
+                                <td>{{ booking.date|date:"d/m/Y" }}</td>
+                                <td>{{ booking.time_start }}</td>
+                                <td>
+                                    {% if booking.state == 0 %}
+                                        Đang chờ
+                                    {% elif booking.state == 1 %}
+                                        Đã hoàn thành
+                                    {% elif booking.state == 2 %}
+                                        Đã bỏ lỡ
+                                    {% else %}
+                                        Không xác định
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="/medical-record/{{booking.id}}/" class="btn btn-info btn-sm">Xem</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center">Không có lịch khám nào.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -138,37 +140,13 @@
             event.preventDefault(); // Ngăn chặn trang tự động reload
             
             const date = document.getElementById('search-date').value;
-            const url = `/api/bookings/search?date=${date}`; // Đường dẫn API để tìm kiếm
-
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    const bookingList = document.getElementById('booking-list');
-                    bookingList.innerHTML = ''; // Xóa danh sách hiện tại
-
-                    if (data.bookings.length > 0) {
-                        data.bookings.forEach((booking, index) => {
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
-                                <th scope="row">${index + 1}</th>
-                                <td>${booking.patient_name}</td>
-                                <td>${booking.date}</td>
-                                <td>${booking.time}</td>
-                                <td>${booking.status}</td>
-                                <td>
-                                    <a href="/api/bookings/${booking.id}/detail" class="btn btn-info btn-sm">Xem</a>
-                                </td>
-                            `;
-                            bookingList.appendChild(row);
-                        });
-                    } else {
-                        bookingList.innerHTML = `<tr><td colspan="6" class="text-center">Không có lịch khám nào.</td></tr>`;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Có lỗi xảy ra! Vui lòng thử lại.');
-                });
+            const url = `http://127.0.0.1:8007/appointment/?date=${date}`
+            $.ajax({
+                url: url,
+                success: function (result) {
+                    $("#dynamic-content").html(result);
+                }
+            });
         };
     </script>
 </body>
