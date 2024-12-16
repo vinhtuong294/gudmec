@@ -90,7 +90,7 @@ class ScheduleService:
         schedule = Schedule.objects.select_related('patient').get(id=id)
         patient =  Patient.objects.get(user_id =user_id )
 
-        if schedule.patient:
+        if schedule.patient and schedule.patient.id == patient.id:
             schedule.is_ready = True
             schedule.patient = None
             schedule.save()

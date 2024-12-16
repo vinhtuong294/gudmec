@@ -232,22 +232,16 @@
                             })
                         })
                         .then(response => {
-                            toast({
-                                title: 'Thành công',
-                                msg: 'Chỉnh sửa thông tin thành công!',
-                                type: 'succeces',
-                                duration: 5000
-                              })
+                            handleUpdateUser()
                             return response.json();
                         })
                         .catch(error => {
                             errorMessage.textContent = 'Failed to update user: ' + error.message;
                             errorMessage.style.display = 'block';
                         });
-                    }else(
+                    }else{
                         handleUpdateUser()
-                    )
-                    
+                    }
                 });
             }
         });

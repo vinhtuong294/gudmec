@@ -62,11 +62,10 @@ def update_schedule_ready_status():
     schedules = Schedule.objects.select_related('patient').all()
     overdue_schedules = schedules.filter(
         date__lte=today,
-        shift__time_start__lt=now.time(),
-        is_ready=True
+        shift__time_start__lt=now.time()
     )
     for schedule in overdue_schedules:
-        if schedule.patient:
+        if schedule.patient and schedule.state != 1:
             schedule.state = 2
             schedule.save()
         else:
@@ -96,7 +95,7 @@ def start_scheduler():
     # Lịch trình chạy: Cập nhật trạng thái schedule mỗi 1 phút
     scheduler.add_job(update_schedule_ready_status, 'interval', minutes=5)
     
-    scheduler.add_job(notify_schedules, 'interval', minutes=1)
+    scheduler.add_job(notify_schedules, 'interval', minutes=5)
     
     scheduler.add_job(auto_delete_schedule, 'cron', hour=0, minute=0)
     

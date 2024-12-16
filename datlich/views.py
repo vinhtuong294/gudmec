@@ -338,28 +338,6 @@ class booking_doctor(APIView):
 
 
 
-# Lấy thông tin chi tiết của bác sĩ
-def get_detail_doctor(request, doctor_id):
-    user = request.user if request.user.is_authenticated else None
-    bookings = doctor_service.get_list_booking_models_of_doctor(doctor_id)
-    doctor = doctor_service.get_doctor_by_id(doctor_id)
-    departments = department_service.get_all_departments()
-
-    context = {
-        "view": "listdoctor/bookAppointment",
-        "file": "bookAppointment",
-        "nav": "partials/navLogged",
-        "navState": "navLogged",
-        "doctor": doctor,
-        "listDepartmentRespones": departments,
-        "ListbookingAvailable": bookings,
-        "scheduleRequest": {},  # Form trống để hiển thị
-    }
-
-    if user:
-        context["user"] = user
-
-    return render(request, "homePage/index.html", context)
 
 
 class Edit_user(APIView):

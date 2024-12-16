@@ -27,7 +27,8 @@ class UserService:
             user.telephone = phone
             user.gender = gender
             user.birthday = birthday
-            user.image = avatar
+            if avatar:
+                user.image = avatar
 
             # Lưu các thay đổi vào cơ sở dữ liệu
             user.save()
