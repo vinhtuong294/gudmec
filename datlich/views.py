@@ -739,7 +739,7 @@ class chuyenkhoa(APIView):
         user = authenticate_service.get_user_from_token(token) 
         department_service = DepartmentService
         context = {
-            "view": "homepage/homeComponent/gioithieu.html",
+            "view": "homepage/homeComponent/chuyenkhoa.html",
             "listDepartmentResponse": department_service.get_all_departments(self),
         }
         if user.role_id==2 :
